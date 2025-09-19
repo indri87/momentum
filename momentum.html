@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Momentum</title>
+  <style>
+    body {
+      background:#000 url('https://media.giphy.com/media/26AHONQ79FdWZhAI0/giphy.gif') center/cover fixed;
+      color:#0ff;
+      font-family: 'Courier New', monospace;
+      margin:0;
+      height:100vh;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      overflow:hidden;
+    }
+    h1 {
+      font-size: clamp(2rem, 12vw, 6rem);
+      font-weight: 900;
+      color:#fff;
+      background:linear-gradient(90deg,#ff0,#f0f,#0ff,#fff);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+      text-shadow:2px 2px 0 #000;
+      position:relative;
+      white-space:nowrap;
+      overflow:hidden;
+      border-right:.15em solid #ff0;
+      animation:typewriter 6s steps(10) 1 normal both, blink 1s step-end infinite;
+      text-align:center;
+    }
+    @keyframes typewriter {
+      from { width: 0 }
+      to { width: 100% }
+    }
+    @keyframes blink {
+      50% { border-color: transparent }
+    }
+    .phone-top, .phone-bottom {
+      position:fixed;
+      width:100%;
+      text-align:center;
+      font-weight:bold;
+      font-size:1.2rem;
+      font-family:'Courier New', monospace;
+      color:#ff0;
+      background:#111;
+      padding:0.3rem 0;
+      z-index:10;
+    }
+    .phone-top {top:0;}
+    .phone-bottom {bottom:0;}
+    .ticker {
+      position:fixed;
+      bottom:2rem;
+      width:100%;
+      background:#ff0;
+      color:#000;
+      font-weight:bold;
+      font-family:'Courier New', monospace;
+      white-space:nowrap;
+      overflow:hidden;
+    }
+    .ticker span {
+      display:inline-block;
+      padding-right:3rem;
+      animation:scroll 8s linear infinite;
+    }
+    @keyframes scroll {
+      0% {transform:translateX(100%)}
+      100% {transform:translateX(-100%)}
+    }
+  </style>
+</head>
+<body>
+  <div class="phone-top">☎ 3204909668</div>
+  <h1>MOMENTUM</h1>
+  <div class="ticker"><span>NO RULES ▲ RADICAL ▲ STRANGE ▲ MOMENTUM ▲</span></div>
+  <div class="phone-bottom">☎ 3204909668</div>
+
+  <!-- Suono tastiera che accompagna -->
+  <audio autoplay loop>
+    <source src="https://www.soundjay.com/mechanical/typewriter-key-2.mp3" type="audio/mpeg">
+  </audio>
+</body>
+</html>
