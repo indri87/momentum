@@ -106,6 +106,14 @@
       90% { transform: translate(-5%, -3%); }
     }
 
+    /* MOBILE OPTIMIZATIONS - Disable heavy effects */
+    @media (max-width: 768px) {
+      body::before {
+        animation: none;
+        opacity: 0.03;
+      }
+    }
+
     /* VIGNETTE EFFECT */
     body::after {
       content: '';
@@ -137,11 +145,20 @@
         transparent 2px
       );
       animation: scanlines 8s linear infinite;
+      will-change: transform;
     }
 
     @keyframes scanlines {
       0% { transform: translateY(0); }
       100% { transform: translateY(20px); }
+    }
+
+    /* Mobile optimization for scanlines */
+    @media (max-width: 768px) {
+      .scanlines {
+        animation: none;
+        opacity: 0.3;
+      }
     }
 
     /* GLITCH OVERLAY */
@@ -155,10 +172,18 @@
       z-index: 9996;
       opacity: 0;
       mix-blend-mode: difference;
+      will-change: transform, opacity;
     }
 
     .glitch-overlay.active {
       animation: glitch 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+    }
+
+    /* Disable glitch on mobile for performance */
+    @media (max-width: 768px) {
+      .glitch-overlay.active {
+        animation: none;
+      }
     }
 
     @keyframes glitch {
@@ -264,6 +289,7 @@
       background: var(--color-primary);
       clip-path: polygon(50% 50%, 50% 0%, 100% 0%);
       animation: blade-rotate 2s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+      will-change: transform;
     }
 
     .blade:nth-child(2) { transform: rotate(60deg); animation-delay: 0.1s; }
@@ -275,6 +301,13 @@
     @keyframes blade-rotate {
       0%, 100% { transform: rotate(0deg) scale(1); }
       50% { transform: rotate(180deg) scale(0.8); }
+    }
+
+    /* Mobile: Faster loader */
+    @media (max-width: 768px) {
+      .blade {
+        animation-duration: 1s;
+      }
     }
 
     /* COLOR GRADING SWITCHER */
@@ -433,11 +466,20 @@
       object-fit: cover;
       filter: grayscale(100%) contrast(1.2);
       animation: slowZoom 20s ease-in-out infinite alternate;
+      will-change: transform;
     }
 
     @keyframes slowZoom {
       from { transform: scale(1); }
       to { transform: scale(1.1); }
+    }
+
+    /* Mobile: Disable heavy zoom animation */
+    @media (max-width: 768px) {
+      .hero-split-bg {
+        animation: none;
+        transform: scale(1.05);
+      }
     }
 
     .hero-split-overlay {
@@ -578,11 +620,24 @@
       filter: grayscale(100%);
       transition: all 0.6s var(--ease);
       transform-origin: center;
+      will-change: transform;
     }
 
     .portfolio-item:hover img {
       filter: grayscale(0%);
       transform: scale(1.05);
+    }
+
+    /* Mobile: Simplify portfolio interactions */
+    @media (max-width: 768px) {
+      .portfolio-item img {
+        filter: grayscale(50%);
+        will-change: auto;
+      }
+
+      .portfolio-item:active img {
+        filter: grayscale(0%);
+      }
     }
 
     .portfolio-info {
@@ -900,10 +955,40 @@
 
       body {
         cursor: default;
+        /* Reduce filter complexity on mobile */
+        filter: none !important;
       }
 
       .scanlines {
-        opacity: 0.5;
+        opacity: 0.3;
+      }
+
+      /* Add touch-action for better mobile performance */
+      * {
+        touch-action: manipulation;
+      }
+
+      /* Reduce motion for better performance */
+      .hero-split-bg,
+      .blade,
+      body::before {
+        animation-duration: 0s;
+      }
+
+      /* Optimize portfolio info for mobile */
+      .portfolio-info {
+        transform: translateY(0);
+        background: linear-gradient(to top, rgba(0,0,0,0.95), rgba(0,0,0,0.7));
+      }
+
+      /* Simplify transitions on mobile */
+      * {
+        transition-duration: 0.2s !important;
+      }
+
+      /* Reduce vignette on mobile */
+      body::after {
+        opacity: 0.3;
       }
     }
   </style>
@@ -1123,16 +1208,36 @@
   </section>
 
   <script>
-    // APERTURE LOADER
-    window.addEventListener('load', () => {
+    // APERTURE LOADER - Optimized for mobile
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || window.innerWidth <= 768;
+    const loaderDuration = isMobile ? 800 : 2000; // Faster on mobile
+
+    // Hide loader function
+    function hideLoader() {
       const loader = document.getElementById('apertureLoader');
-      setTimeout(() => {
+      if (loader && !loader.classList.contains('hidden')) {
         loader.classList.add('hidden');
         setTimeout(() => {
           loader.style.display = 'none';
         }, 600);
-      }, 2000);
+      }
+    }
+
+    // Multiple strategies to ensure loader always closes
+    // 1. On DOMContentLoaded (faster for mobile)
+    document.addEventListener('DOMContentLoaded', () => {
+      if (isMobile) {
+        setTimeout(hideLoader, loaderDuration);
+      }
     });
+
+    // 2. On full load
+    window.addEventListener('load', () => {
+      setTimeout(hideLoader, isMobile ? 500 : loaderDuration);
+    });
+
+    // 3. Failsafe - always hide after max time
+    setTimeout(hideLoader, isMobile ? 1500 : 3000);
 
     // COLOR GRADING SWITCHER
     const gradeButtons = document.querySelectorAll('.grade-btn');
@@ -1159,12 +1264,14 @@
       }, 300);
     }
 
-    // Random glitch effects
-    setInterval(() => {
-      if (Math.random() > 0.95) {
-        triggerGlitch();
-      }
-    }, 3000);
+    // Random glitch effects - Disabled on mobile for performance
+    if (!isMobile) {
+      setInterval(() => {
+        if (Math.random() > 0.95) {
+          triggerGlitch();
+        }
+      }, 3000);
+    }
 
     // TIMELINE SCRUBBER
     const timelineProgress = document.getElementById('timelineProgress');
@@ -1201,44 +1308,46 @@
       });
     });
 
-    // CUSTOM CURSOR
-    const cursor = document.querySelector('.cursor');
-    const cursorFollower = document.querySelector('.cursor-follower');
+    // CUSTOM CURSOR - Disabled on mobile for performance
+    if (!isMobile) {
+      const cursor = document.querySelector('.cursor');
+      const cursorFollower = document.querySelector('.cursor-follower');
 
-    let mouseX = 0;
-    let mouseY = 0;
-    let followerX = 0;
-    let followerY = 0;
+      let mouseX = 0;
+      let mouseY = 0;
+      let followerX = 0;
+      let followerY = 0;
 
-    document.addEventListener('mousemove', (e) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-      cursor.style.transform = `translate(${mouseX - 4}px, ${mouseY - 4}px)`;
-    });
+      document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        cursor.style.transform = `translate(${mouseX - 4}px, ${mouseY - 4}px)`;
+      });
 
-    function animateFollower() {
-      const distX = mouseX - followerX;
-      const distY = mouseY - followerY;
+      function animateFollower() {
+        const distX = mouseX - followerX;
+        const distY = mouseY - followerY;
 
-      followerX += distX * 0.1;
-      followerY += distY * 0.1;
+        followerX += distX * 0.1;
+        followerY += distY * 0.1;
 
-      cursorFollower.style.transform = `translate(${followerX - 20}px, ${followerY - 20}px)`;
+        cursorFollower.style.transform = `translate(${followerX - 20}px, ${followerY - 20}px)`;
 
-      requestAnimationFrame(animateFollower);
+        requestAnimationFrame(animateFollower);
+      }
+      animateFollower();
+
+      // Hover effect on interactive elements
+      const interactiveElements = document.querySelectorAll('.portfolio-item, .contact-card, a, button, .timeline-label');
+      interactiveElements.forEach(el => {
+        el.addEventListener('mouseenter', () => {
+          cursorFollower.classList.add('hover');
+        });
+        el.addEventListener('mouseleave', () => {
+          cursorFollower.classList.remove('hover');
+        });
+      });
     }
-    animateFollower();
-
-    // Hover effect on interactive elements
-    const interactiveElements = document.querySelectorAll('.portfolio-item, .contact-card, a, button, .timeline-label');
-    interactiveElements.forEach(el => {
-      el.addEventListener('mouseenter', () => {
-        cursorFollower.classList.add('hover');
-      });
-      el.addEventListener('mouseleave', () => {
-        cursorFollower.classList.remove('hover');
-      });
-    });
 
     // ROTATING SUBTITLE
     const rotatingText = document.querySelector('.rotating-text');
@@ -1259,28 +1368,30 @@
 
     rotatingText.style.transition = 'opacity 0.3s var(--ease), transform 0.3s var(--ease)';
 
-    // PARALLAX HERO & SPLIT SCREEN
+    // PARALLAX HERO & SPLIT SCREEN - Simplified on mobile
     const hero = document.querySelector('.hero');
     const heroTitle = document.querySelector('.hero-title');
     const heroSplitRight = document.querySelector('.hero-split-right');
     const heroSplitBg = document.querySelector('.hero-split-bg');
 
-    window.addEventListener('scroll', () => {
-      const scrolled = window.pageYOffset;
-      const heroHeight = hero.offsetHeight;
+    if (!isMobile) {
+      window.addEventListener('scroll', () => {
+        const scrolled = window.pageYOffset;
+        const heroHeight = hero.offsetHeight;
 
-      if (scrolled < heroHeight) {
-        const opacity = 1 - scrolled / heroHeight;
-        const translateY = scrolled * 0.5;
+        if (scrolled < heroHeight) {
+          const opacity = 1 - scrolled / heroHeight;
+          const translateY = scrolled * 0.5;
 
-        heroTitle.style.opacity = opacity;
-        heroTitle.style.transform = `translateX(0) translateY(${translateY}px)`;
+          heroTitle.style.opacity = opacity;
+          heroTitle.style.transform = `translateX(0) translateY(${translateY}px)`;
 
-        if (heroSplitBg) {
-          heroSplitBg.style.transform = `scale(1.1) translateY(${scrolled * 0.3}px)`;
+          if (heroSplitBg) {
+            heroSplitBg.style.transform = `scale(1.1) translateY(${scrolled * 0.3}px)`;
+          }
         }
-      }
-    });
+      });
+    }
 
     // SCROLL REVEAL
     const sections = document.querySelectorAll('section');
@@ -1299,30 +1410,32 @@
     window.addEventListener('scroll', revealSection);
     revealSection();
 
-    // MAGNETIC EFFECT ON IMAGES
-    const portfolioItems = document.querySelectorAll('.portfolio-item');
+    // MAGNETIC EFFECT ON IMAGES - Disabled on mobile for performance
+    if (!isMobile) {
+      const portfolioItems = document.querySelectorAll('.portfolio-item');
 
-    portfolioItems.forEach(item => {
-      const img = item.querySelector('img');
+      portfolioItems.forEach(item => {
+        const img = item.querySelector('img');
 
-      item.addEventListener('mousemove', (e) => {
-        const rect = item.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
+        item.addEventListener('mousemove', (e) => {
+          const rect = item.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
 
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
+          const centerX = rect.width / 2;
+          const centerY = rect.height / 2;
 
-        const deltaX = (x - centerX) / centerX;
-        const deltaY = (y - centerY) / centerY;
+          const deltaX = (x - centerX) / centerX;
+          const deltaY = (y - centerY) / centerY;
 
-        img.style.transform = `scale(1.05) translate(${deltaX * 20}px, ${deltaY * 20}px)`;
+          img.style.transform = `scale(1.05) translate(${deltaX * 20}px, ${deltaY * 20}px)`;
+        });
+
+        item.addEventListener('mouseleave', () => {
+          img.style.transform = 'scale(1) translate(0, 0)';
+        });
       });
-
-      item.addEventListener('mouseleave', () => {
-        img.style.transform = 'scale(1) translate(0, 0)';
-      });
-    });
+    }
 
     // MARQUEE DUPLICATION FOR SEAMLESS LOOP
     const marqueeContent = document.querySelector('.marquee-content');
