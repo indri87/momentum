@@ -1,89 +1,762 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Momentum</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MOMENTUM — Collettivo Cinematografico</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
   <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --black: #000000;
+      --white: #ffffff;
+      --gray: #666666;
+      --ease: cubic-bezier(0.75, 0, 0.25, 1);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
-      background:#000 url('https://media.giphy.com/media/26AHONQ79FdWZhAI0/giphy.gif') center/cover fixed;
-      color:#0ff;
-      font-family: 'Courier New', monospace;
-      margin:0;
-      height:100vh;
-      display:flex;
-      flex-direction:column;
-      justify-content:center;
-      align-items:center;
-      overflow:hidden;
+      font-family: 'Space Grotesk', sans-serif;
+      background: var(--black);
+      color: var(--white);
+      cursor: none;
+      overflow-x: hidden;
+      position: relative;
     }
-    h1 {
-      font-size: clamp(2rem, 12vw, 6rem);
-      font-weight: 900;
-      color:#fff;
-      background:linear-gradient(90deg,#ff0,#f0f,#0ff,#fff);
-      -webkit-background-clip:text;
-      -webkit-text-fill-color:transparent;
-      text-shadow:2px 2px 0 #000;
-      position:relative;
-      white-space:nowrap;
-      overflow:hidden;
-      border-right:.15em solid #ff0;
-      animation:typewriter 6s steps(10) 1 normal both, blink 1s step-end infinite;
-      text-align:center;
+
+    /* GRAIN TEXTURE */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0.03;
+      z-index: 9999;
+      pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
     }
-    @keyframes typewriter {
-      from { width: 0 }
-      to { width: 100% }
+
+    /* CUSTOM CURSOR */
+    .cursor {
+      position: fixed;
+      width: 8px;
+      height: 8px;
+      background: var(--white);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 10000;
+      mix-blend-mode: difference;
+      transition: transform 0.1s var(--ease);
     }
-    @keyframes blink {
-      50% { border-color: transparent }
+
+    .cursor-follower {
+      position: fixed;
+      width: 40px;
+      height: 40px;
+      border: 1px solid var(--white);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 10000;
+      mix-blend-mode: difference;
+      transition: all 0.3s var(--ease);
     }
-    .phone-top, .phone-bottom {
-      position:fixed;
-      width:100%;
-      text-align:center;
-      font-weight:bold;
-      font-size:1.2rem;
-      font-family:'Courier New', monospace;
-      color:#ff0;
-      background:#111;
-      padding:0.3rem 0;
-      z-index:10;
+
+    .cursor-follower.hover {
+      transform: scale(1.5);
     }
-    .phone-top {top:0;}
-    .phone-bottom {bottom:0;}
-    .ticker {
-      position:fixed;
-      bottom:2rem;
-      width:100%;
-      background:#ff0;
-      color:#000;
-      font-weight:bold;
-      font-family:'Courier New', monospace;
-      white-space:nowrap;
-      overflow:hidden;
+
+    /* SECTION NUMBERING */
+    .section-number {
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      opacity: 0.5;
+      text-transform: uppercase;
+      margin-bottom: 4rem;
+      font-weight: 300;
     }
-    .ticker span {
-      display:inline-block;
-      padding-right:3rem;
-      animation:scroll 8s linear infinite;
+
+    /* HERO SECTION */
+    .hero {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
     }
-    @keyframes scroll {
-      0% {transform:translateX(100%)}
-      100% {transform:translateX(-100%)}
+
+    .hero-title {
+      font-size: clamp(4rem, 15vw, 10rem);
+      font-weight: 700;
+      letter-spacing: -0.05em;
+      line-height: 0.9;
+      text-transform: uppercase;
+      opacity: 0;
+      transform: translateY(50px);
+      animation: fadeInUp 1.2s var(--ease) forwards;
+    }
+
+    .hero-subtitle {
+      font-size: clamp(1.5rem, 4vw, 3rem);
+      font-weight: 300;
+      letter-spacing: -0.02em;
+      margin-top: 2rem;
+      opacity: 0;
+      animation: fadeInUp 1.2s var(--ease) 0.3s forwards;
+      height: 4rem;
+      display: flex;
+      align-items: center;
+    }
+
+    .rotating-text {
+      font-style: italic;
+      position: relative;
+      display: inline-block;
+      min-width: 400px;
+    }
+
+    .hero-tagline {
+      position: absolute;
+      bottom: 4rem;
+      font-size: 0.875rem;
+      letter-spacing: 0.3em;
+      opacity: 0;
+      animation: fadeInUp 1.2s var(--ease) 0.6s forwards;
+      font-weight: 300;
+    }
+
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* MARQUEE */
+    .marquee {
+      background: var(--white);
+      color: var(--black);
+      padding: 1.5rem 0;
+      overflow: hidden;
+      white-space: nowrap;
+      border-top: 1px solid var(--black);
+      border-bottom: 1px solid var(--black);
+    }
+
+    .marquee-content {
+      display: inline-block;
+      padding-left: 100%;
+      animation: marquee 30s linear infinite;
+      font-size: 0.875rem;
+      letter-spacing: 0.2em;
+      font-weight: 500;
+    }
+
+    @keyframes marquee {
+      0% {
+        transform: translate(0, 0);
+      }
+      100% {
+        transform: translate(-100%, 0);
+      }
+    }
+
+    /* MAIN SECTIONS */
+    section {
+      padding: 8rem 5vw;
+      opacity: 0;
+      transform: translateY(80px);
+      transition: all 1s var(--ease);
+    }
+
+    section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* PORTFOLIO GRID */
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 2rem;
+      margin-top: 4rem;
+    }
+
+    .portfolio-item {
+      position: relative;
+      aspect-ratio: 16/10;
+      overflow: hidden;
+      background: var(--gray);
+      cursor: none;
+    }
+
+    .portfolio-item:nth-child(3n+1) {
+      grid-column: span 2;
+    }
+
+    .portfolio-item:nth-child(3n+2) {
+      grid-column: span 1;
+    }
+
+    .portfolio-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: grayscale(100%);
+      transition: all 0.6s var(--ease);
+      transform-origin: center;
+    }
+
+    .portfolio-item:hover img {
+      filter: grayscale(0%);
+      transform: scale(1.05);
+    }
+
+    .portfolio-info {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 2rem;
+      background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+      transform: translateY(100%);
+      transition: transform 0.6s var(--ease);
+    }
+
+    .portfolio-item:hover .portfolio-info {
+      transform: translateY(0);
+    }
+
+    .portfolio-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.02em;
+    }
+
+    .portfolio-meta {
+      font-size: 0.875rem;
+      opacity: 0.7;
+      font-weight: 300;
+    }
+
+    /* CHI SIAMO */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 6rem;
+      margin-top: 4rem;
+    }
+
+    .manifesto {
+      font-size: 1.125rem;
+      line-height: 1.8;
+      font-weight: 300;
+      letter-spacing: -0.01em;
+    }
+
+    .quote-block {
+      position: relative;
+      padding-left: 3rem;
+    }
+
+    .quote-mark {
+      position: absolute;
+      left: 0;
+      top: -1rem;
+      font-size: 8rem;
+      line-height: 1;
+      opacity: 0.1;
+      font-style: italic;
+    }
+
+    .quote-text {
+      font-size: 2rem;
+      font-style: italic;
+      line-height: 1.4;
+      font-weight: 300;
+      letter-spacing: -0.02em;
+    }
+
+    /* PROGETTI IN SVILUPPO */
+    .dev-projects {
+      margin-top: 4rem;
+    }
+
+    .dev-project {
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      padding: 3rem 0;
+      display: grid;
+      grid-template-columns: 2fr 3fr;
+      gap: 4rem;
+      transition: all 0.4s var(--ease);
+    }
+
+    .dev-project:hover {
+      padding-left: 2rem;
+      border-bottom-color: var(--white);
+    }
+
+    .dev-project-title {
+      font-size: 2rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .dev-badge {
+      background: var(--white);
+      color: var(--black);
+      font-size: 0.625rem;
+      padding: 0.5rem 1rem;
+      border-radius: 2rem;
+      letter-spacing: 0.1em;
+      font-weight: 500;
+    }
+
+    .dev-project-meta {
+      font-size: 0.875rem;
+      opacity: 0.5;
+      margin-bottom: 1rem;
+      font-weight: 300;
+    }
+
+    .dev-project-desc {
+      font-size: 1rem;
+      line-height: 1.6;
+      font-weight: 300;
+    }
+
+    /* CONTATTI */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 4rem;
+    }
+
+    .contact-card {
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 3rem 2rem;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.5s var(--ease);
+      cursor: none;
+    }
+
+    .contact-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 100%;
+      background: var(--white);
+      transition: width 0.5s var(--ease);
+      z-index: 1;
+    }
+
+    .contact-card:hover::before {
+      width: 100%;
+    }
+
+    .contact-card > * {
+      position: relative;
+      z-index: 2;
+      transition: color 0.3s var(--ease);
+    }
+
+    .contact-card:hover > * {
+      color: var(--black);
+    }
+
+    .contact-name {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.02em;
+    }
+
+    .contact-role {
+      font-size: 0.875rem;
+      opacity: 0.6;
+      margin-bottom: 2rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-weight: 300;
+    }
+
+    .contact-card:hover .contact-role {
+      opacity: 0.5;
+    }
+
+    .contact-info {
+      font-size: 0.875rem;
+      line-height: 2;
+      font-weight: 400;
+    }
+
+    .contact-info a {
+      color: inherit;
+      text-decoration: none;
+      transition: opacity 0.3s var(--ease);
+    }
+
+    .contact-info a:hover {
+      opacity: 0.7;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .hero-title {
+        font-size: 3rem;
+      }
+
+      .hero-subtitle {
+        font-size: 1.2rem;
+      }
+
+      .rotating-text {
+        min-width: 200px;
+      }
+
+      .portfolio-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .portfolio-item:nth-child(3n+1),
+      .portfolio-item:nth-child(3n+2) {
+        grid-column: span 1;
+      }
+
+      .about-grid {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+      }
+
+      .dev-project {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+
+      section {
+        padding: 4rem 1.5rem;
+      }
+
+      .cursor,
+      .cursor-follower {
+        display: none;
+      }
+
+      body {
+        cursor: default;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="phone-top">☎ 3204909668</div>
-  <h1>MOMENTUM</h1>
-  <div class="ticker"><span>NO RULES ▲ RADICAL ▲ STRANGE ▲ MOMENTUM ▲</span></div>
-  <div class="phone-bottom">☎ 3204909668</div>
+  <!-- Custom Cursor -->
+  <div class="cursor"></div>
+  <div class="cursor-follower"></div>
 
-  <!-- Suono tastiera che accompagna -->
-  <audio autoplay loop>
-    <source src="https://www.soundjay.com/mechanical/typewriter-key-2.mp3" type="audio/mpeg">
-  </audio>
+  <!-- HERO -->
+  <section class="hero">
+    <h1 class="hero-title">MOMENTUM</h1>
+    <div class="hero-subtitle">
+      <span class="rotating-text">storie coraggiose</span>
+    </div>
+    <div class="hero-tagline">COLLETTIVO CINEMATOGRAFICO — TORINO</div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee">
+    <div class="marquee-content">
+      TORINO FILM FESTIVAL • CINEMA D'AUTORE • DISTRIBUZIONE INTERNAZIONALE •
+      TORINO FILM FESTIVAL • CINEMA D'AUTORE • DISTRIBUZIONE INTERNAZIONALE •
+      TORINO FILM FESTIVAL • CINEMA D'AUTORE • DISTRIBUZIONE INTERNAZIONALE •
+    </div>
+  </div>
+
+  <!-- 01 PORTFOLIO -->
+  <section id="portfolio">
+    <div class="section-number">01 — PORTFOLIO</div>
+
+    <div class="portfolio-grid">
+      <div class="portfolio-item">
+        <img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?w=1200&q=80" alt="ina row">
+        <div class="portfolio-info">
+          <div class="portfolio-title">ina row</div>
+          <div class="portfolio-meta">Rocco Zaupa, 2024 • Sperimentale</div>
+        </div>
+      </div>
+
+      <div class="portfolio-item">
+        <img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=800&q=80" alt="Ritorno al Lago">
+        <div class="portfolio-info">
+          <div class="portfolio-title">Ritorno al Lago</div>
+          <div class="portfolio-meta">Milena Karaeva, 2025 • Drammatico</div>
+        </div>
+      </div>
+
+      <div class="portfolio-item">
+        <img src="https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=1200&q=80" alt="Il Macellaio">
+        <div class="portfolio-info">
+          <div class="portfolio-title">Il Macellaio</div>
+          <div class="portfolio-meta">Palmeri/Berca, 2024 • Dark Fantasy</div>
+        </div>
+      </div>
+
+      <div class="portfolio-item">
+        <img src="https://images.unsplash.com/photo-1594908900066-3f47337549d8?w=800&q=80" alt="Progetto Cinema">
+        <div class="portfolio-info">
+          <div class="portfolio-title">Archivio Visivo</div>
+          <div class="portfolio-meta">Collettivo Momentum, 2024</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 CHI SIAMO -->
+  <section id="about">
+    <div class="section-number">02 — MANIFESTO</div>
+
+    <div class="about-grid">
+      <div class="manifesto">
+        <p>Momentum è un collettivo cinematografico indipendente con base a Torino, dedito alla produzione e distribuzione di opere visionarie che sfidano i confini del cinema convenzionale.</p>
+        <br>
+        <p>Crediamo in storie coraggiose, ossessive, ricercate. Lavoriamo con registi che hanno qualcosa da dire e che non accettano compromessi nella loro visione artistica.</p>
+        <br>
+        <p>Dal documentario sperimentale al dark fantasy, dalla ricerca visiva al cinema d'autore, ogni progetto è un'esplorazione radicale del linguaggio cinematografico.</p>
+      </div>
+
+      <div class="quote-block">
+        <div class="quote-mark">"</div>
+        <div class="quote-text">Non facciamo cinema per compiacere. Lo facciamo perché non possiamo farne a meno.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 PROGETTI IN SVILUPPO -->
+  <section id="development">
+    <div class="section-number">03 — IN SVILUPPO</div>
+
+    <div class="dev-projects">
+      <div class="dev-project">
+        <div class="dev-project-title">
+          Untitled Thriller
+          <span class="dev-badge">SVILUPPO</span>
+        </div>
+        <div>
+          <div class="dev-project-meta">Fedor Pavlov • Thriller Psicologico</div>
+          <div class="dev-project-desc">
+            Un'esplorazione claustrofobica della paranoia urbana. Un uomo scopre che la sua vita è stata meticolosamente orchestrata da una presenza invisibile. Produzione prevista 2025.
+          </div>
+        </div>
+      </div>
+
+      <div class="dev-project">
+        <div class="dev-project-title">
+          Cadáveres Exquisitos
+          <span class="dev-badge">SVILUPPO</span>
+        </div>
+        <div>
+          <div class="dev-project-meta">Leandro Reis • Grottesco</div>
+          <div class="dev-project-desc">
+            Una commedia nera che decostruisce i rituali della classe media attraverso il surrealismo visivo e il body horror. Un'opera che sfida ogni convenzione narrativa.
+          </div>
+        </div>
+      </div>
+
+      <div class="dev-project">
+        <div class="dev-project-title">
+          La Memoria Dell'Acqua
+          <span class="dev-badge">SVILUPPO</span>
+        </div>
+        <div>
+          <div class="dev-project-meta">Indrit Metuku • Documentario Poetico</div>
+          <div class="dev-project-desc">
+            Un viaggio visivo attraverso i corsi d'acqua d'Europa, esplorando la memoria collettiva attraverso il linguaggio del fiume. Fotografia analogica 16mm.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 CONTATTI -->
+  <section id="contact">
+    <div class="section-number">04 — CONTATTI</div>
+
+    <div class="contact-grid">
+      <div class="contact-card">
+        <div class="contact-name">Rocco Zaupa</div>
+        <div class="contact-role">Fondatore & Regista</div>
+        <div class="contact-info">
+          <div>+39 320 490 9668</div>
+          <div><a href="mailto:rocco@momentum.film">rocco@momentum.film</a></div>
+          <div><a href="https://linkedin.com/in/roccozaupa" target="_blank">LinkedIn</a></div>
+        </div>
+      </div>
+
+      <div class="contact-card">
+        <div class="contact-name">Fedor Pavlov</div>
+        <div class="contact-role">Regista & Sceneggiatore</div>
+        <div class="contact-info">
+          <div>+39 345 678 9012</div>
+          <div><a href="mailto:fedor@momentum.film">fedor@momentum.film</a></div>
+          <div><a href="https://linkedin.com/in/fedorpavlov" target="_blank">LinkedIn</a></div>
+        </div>
+      </div>
+
+      <div class="contact-card">
+        <div class="contact-name">Indrit Metuku</div>
+        <div class="contact-role">Producer & Distribution</div>
+        <div class="contact-info">
+          <div>+39 334 567 8901</div>
+          <div><a href="mailto:indrit@momentum.film">indrit@momentum.film</a></div>
+          <div><a href="https://linkedin.com/in/indritmetuku" target="_blank">LinkedIn</a></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // CUSTOM CURSOR
+    const cursor = document.querySelector('.cursor');
+    const cursorFollower = document.querySelector('.cursor-follower');
+
+    let mouseX = 0;
+    let mouseY = 0;
+    let followerX = 0;
+    let followerY = 0;
+
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      cursor.style.transform = `translate(${mouseX - 4}px, ${mouseY - 4}px)`;
+    });
+
+    function animateFollower() {
+      const distX = mouseX - followerX;
+      const distY = mouseY - followerY;
+
+      followerX += distX * 0.1;
+      followerY += distY * 0.1;
+
+      cursorFollower.style.transform = `translate(${followerX - 20}px, ${followerY - 20}px)`;
+
+      requestAnimationFrame(animateFollower);
+    }
+    animateFollower();
+
+    // Hover effect on interactive elements
+    const interactiveElements = document.querySelectorAll('.portfolio-item, .contact-card, a');
+    interactiveElements.forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        cursorFollower.classList.add('hover');
+      });
+      el.addEventListener('mouseleave', () => {
+        cursorFollower.classList.remove('hover');
+      });
+    });
+
+    // ROTATING SUBTITLE
+    const rotatingText = document.querySelector('.rotating-text');
+    const texts = ['storie coraggiose', 'storie ossessive', 'storie ricercate', 'storie visionarie'];
+    let currentIndex = 0;
+
+    setInterval(() => {
+      currentIndex = (currentIndex + 1) % texts.length;
+      rotatingText.style.opacity = '0';
+      rotatingText.style.transform = 'translateY(-20px)';
+
+      setTimeout(() => {
+        rotatingText.textContent = texts[currentIndex];
+        rotatingText.style.opacity = '1';
+        rotatingText.style.transform = 'translateY(0)';
+      }, 300);
+    }, 3000);
+
+    rotatingText.style.transition = 'opacity 0.3s var(--ease), transform 0.3s var(--ease)';
+
+    // PARALLAX HERO
+    const hero = document.querySelector('.hero');
+    const heroTitle = document.querySelector('.hero-title');
+
+    window.addEventListener('scroll', () => {
+      const scrolled = window.pageYOffset;
+      const heroHeight = hero.offsetHeight;
+
+      if (scrolled < heroHeight) {
+        heroTitle.style.opacity = 1 - scrolled / heroHeight;
+        heroTitle.style.transform = `translateY(${scrolled * 0.5}px)`;
+      }
+    });
+
+    // SCROLL REVEAL
+    const sections = document.querySelectorAll('section');
+
+    const revealSection = () => {
+      sections.forEach(section => {
+        const sectionTop = section.getBoundingClientRect().top;
+        const windowHeight = window.innerHeight;
+
+        if (sectionTop < windowHeight * 0.75) {
+          section.classList.add('visible');
+        }
+      });
+    };
+
+    window.addEventListener('scroll', revealSection);
+    revealSection();
+
+    // MAGNETIC EFFECT ON IMAGES
+    const portfolioItems = document.querySelectorAll('.portfolio-item');
+
+    portfolioItems.forEach(item => {
+      const img = item.querySelector('img');
+
+      item.addEventListener('mousemove', (e) => {
+        const rect = item.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+
+        const deltaX = (x - centerX) / centerX;
+        const deltaY = (y - centerY) / centerY;
+
+        img.style.transform = `scale(1.05) translate(${deltaX * 20}px, ${deltaY * 20}px)`;
+      });
+
+      item.addEventListener('mouseleave', () => {
+        img.style.transform = 'scale(1) translate(0, 0)';
+      });
+    });
+
+    // MARQUEE DUPLICATION FOR SEAMLESS LOOP
+    const marqueeContent = document.querySelector('.marquee-content');
+    marqueeContent.innerHTML = marqueeContent.innerHTML + marqueeContent.innerHTML;
+  </script>
 </body>
 </html>
