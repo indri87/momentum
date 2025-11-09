@@ -1,1445 +1,964 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MOMENTUM — Collettivo Cinematografico</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    :root {
-      --black: #000000;
-      --white: #ffffff;
-      --gray: #666666;
-      --ease: cubic-bezier(0.75, 0, 0.25, 1);
-
-      /* Color Grading Variables */
-      --color-primary: #ffffff;
-      --color-secondary: #000000;
-      --filter-grade: none;
-      --vignette-opacity: 0.3;
-    }
-
-    /* COLOR GRADING THEMES */
-    body[data-grade="default"] {
-      --color-primary: #ffffff;
-      --color-secondary: #000000;
-      --filter-grade: none;
-    }
-
-    body[data-grade="noir"] {
-      --color-primary: #e0e0e0;
-      --color-secondary: #0a0a0a;
-      --filter-grade: contrast(1.3) brightness(0.9);
-      --vignette-opacity: 0.6;
-    }
-
-    body[data-grade="technicolor"] {
-      --color-primary: #fff5e1;
-      --color-secondary: #1a0f0f;
-      --filter-grade: saturate(1.4) hue-rotate(-5deg) contrast(1.1);
-      --vignette-opacity: 0.2;
-    }
-
-    body[data-grade="bleach"] {
-      --color-primary: #f8f8f8;
-      --color-secondary: #1a1a1a;
-      --filter-grade: saturate(0.7) contrast(1.2) brightness(1.1);
-      --vignette-opacity: 0.1;
-    }
-
-    body[data-grade="cyberpunk"] {
-      --color-primary: #00ff9d;
-      --color-secondary: #0a0015;
-      --filter-grade: saturate(1.6) hue-rotate(15deg);
-      --vignette-opacity: 0.5;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      font-family: 'Space Grotesk', sans-serif;
-      background: var(--color-secondary);
-      color: var(--color-primary);
-      cursor: none;
-      overflow-x: hidden;
-      position: relative;
-      filter: var(--filter-grade);
-      transition: all 0.6s var(--ease);
-    }
-
-    /* FILM GRAIN TEXTURE - Enhanced */
-    body::before {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      opacity: 0.08;
-      z-index: 9999;
-      pointer-events: none;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-      animation: grain 0.3s steps(10) infinite;
-    }
-
-    @keyframes grain {
-      0%, 100% { transform: translate(0, 0); }
-      10% { transform: translate(-5%, -5%); }
-      20% { transform: translate(3%, 3%); }
-      30% { transform: translate(-3%, 5%); }
-      40% { transform: translate(5%, -3%); }
-      50% { transform: translate(-5%, 3%); }
-      60% { transform: translate(3%, -5%); }
-      70% { transform: translate(-3%, -3%); }
-      80% { transform: translate(5%, 5%); }
-      90% { transform: translate(-5%, -3%); }
-    }
-
-    /* MOBILE OPTIMIZATIONS - Disable heavy effects */
-    @media (max-width: 768px) {
-      body::before {
-        animation: none;
-        opacity: 0.03;
-      }
-    }
-
-    /* VIGNETTE EFFECT */
-    body::after {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 9998;
-      background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,var(--vignette-opacity)) 100%);
-      transition: opacity 0.6s var(--ease);
-    }
-
-    /* VHS SCANLINES */
-    .scanlines {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 9997;
-      background: repeating-linear-gradient(
-        0deg,
-        rgba(0, 0, 0, 0.15),
-        rgba(0, 0, 0, 0.15) 1px,
-        transparent 1px,
-        transparent 2px
-      );
-      animation: scanlines 8s linear infinite;
-      will-change: transform;
-    }
-
-    @keyframes scanlines {
-      0% { transform: translateY(0); }
-      100% { transform: translateY(20px); }
-    }
-
-    /* Mobile optimization for scanlines */
-    @media (max-width: 768px) {
-      .scanlines {
-        animation: none;
-        opacity: 0.3;
-      }
-    }
-
-    /* GLITCH OVERLAY */
-    .glitch-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 9996;
-      opacity: 0;
-      mix-blend-mode: difference;
-      will-change: transform, opacity;
-    }
-
-    .glitch-overlay.active {
-      animation: glitch 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
-    }
-
-    /* Disable glitch on mobile for performance */
-    @media (max-width: 768px) {
-      .glitch-overlay.active {
-        animation: none;
-      }
-    }
-
-    @keyframes glitch {
-      0% {
-        opacity: 0;
-        transform: translate(0);
-      }
-      20% {
-        opacity: 1;
-        transform: translate(-5px, 5px);
-        filter: hue-rotate(90deg);
-      }
-      40% {
-        opacity: 1;
-        transform: translate(5px, -5px);
-        filter: hue-rotate(180deg);
-      }
-      60% {
-        opacity: 1;
-        transform: translate(-5px, -5px);
-        filter: hue-rotate(270deg);
-      }
-      80% {
-        opacity: 1;
-        transform: translate(5px, 5px);
-        filter: hue-rotate(360deg);
-      }
-      100% {
-        opacity: 0;
-        transform: translate(0);
-      }
-    }
-
-    /* CUSTOM CURSOR */
-    .cursor {
-      position: fixed;
-      width: 8px;
-      height: 8px;
-      background: var(--white);
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 10000;
-      mix-blend-mode: difference;
-      transition: transform 0.1s var(--ease);
-    }
-
-    .cursor-follower {
-      position: fixed;
-      width: 40px;
-      height: 40px;
-      border: 1px solid var(--white);
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 10000;
-      mix-blend-mode: difference;
-      transition: all 0.3s var(--ease);
-    }
-
-    .cursor-follower.hover {
-      transform: scale(1.5);
-    }
-
-    /* SECTION NUMBERING */
-    .section-number {
-      font-size: 0.75rem;
-      letter-spacing: 0.2em;
-      opacity: 0.5;
-      text-transform: uppercase;
-      margin-bottom: 4rem;
-      font-weight: 300;
-    }
-
-    /* APERTURE LOADER */
-    .aperture-loader {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 10000;
-      background: var(--color-secondary);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      pointer-events: none;
-      transition: opacity 0.6s var(--ease);
-    }
-
-    .aperture-loader.hidden {
-      opacity: 0;
-    }
-
-    .aperture {
-      width: 120px;
-      height: 120px;
-      position: relative;
-    }
-
-    .blade {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      background: var(--color-primary);
-      clip-path: polygon(50% 50%, 50% 0%, 100% 0%);
-      animation: blade-rotate 2s cubic-bezier(0.65, 0, 0.35, 1) infinite;
-      will-change: transform;
-    }
-
-    .blade:nth-child(2) { transform: rotate(60deg); animation-delay: 0.1s; }
-    .blade:nth-child(3) { transform: rotate(120deg); animation-delay: 0.2s; }
-    .blade:nth-child(4) { transform: rotate(180deg); animation-delay: 0.3s; }
-    .blade:nth-child(5) { transform: rotate(240deg); animation-delay: 0.4s; }
-    .blade:nth-child(6) { transform: rotate(300deg); animation-delay: 0.5s; }
-
-    @keyframes blade-rotate {
-      0%, 100% { transform: rotate(0deg) scale(1); }
-      50% { transform: rotate(180deg) scale(0.8); }
-    }
-
-    /* Mobile: Faster loader */
-    @media (max-width: 768px) {
-      .blade {
-        animation-duration: 1s;
-      }
-    }
-
-    /* COLOR GRADING SWITCHER */
-    .grade-switcher {
-      position: fixed;
-      top: 2rem;
-      right: 2rem;
-      z-index: 9995;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      opacity: 0;
-      animation: fadeInUp 1.2s var(--ease) 1s forwards;
-    }
-
-    .grade-label {
-      font-size: 0.625rem;
-      letter-spacing: 0.2em;
-      opacity: 0.5;
-      text-transform: uppercase;
-      margin-bottom: 0.5rem;
-      font-weight: 300;
-    }
-
-    .grade-btn {
-      background: transparent;
-      border: 1px solid var(--color-primary);
-      color: var(--color-primary);
-      padding: 0.5rem 1rem;
-      font-size: 0.75rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      cursor: none;
-      transition: all 0.3s var(--ease);
-      font-family: 'Space Grotesk', sans-serif;
-      font-weight: 500;
-    }
-
-    .grade-btn:hover,
-    .grade-btn.active {
-      background: var(--color-primary);
-      color: var(--color-secondary);
-    }
-
-    /* TIMELINE SCRUBBER */
-    .timeline-scrubber {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 60px;
-      background: rgba(0, 0, 0, 0.8);
-      backdrop-filter: blur(10px);
-      z-index: 9994;
-      display: flex;
-      align-items: center;
-      padding: 0 2rem;
-      gap: 2rem;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-      opacity: 0;
-      transform: translateY(100%);
-      animation: slideUp 1s var(--ease) 1.5s forwards;
-    }
-
-    @keyframes slideUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .timeline-track {
-      flex: 1;
-      height: 4px;
-      background: rgba(255, 255, 255, 0.2);
-      position: relative;
-      cursor: none;
-    }
-
-    .timeline-progress {
-      height: 100%;
-      background: var(--color-primary);
-      width: 0%;
-      transition: width 0.3s var(--ease);
-    }
-
-    .timeline-marker {
-      position: absolute;
-      width: 12px;
-      height: 12px;
-      background: var(--color-primary);
-      border-radius: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      cursor: none;
-      transition: all 0.3s var(--ease);
-    }
-
-    .timeline-marker:hover {
-      transform: translate(-50%, -50%) scale(1.5);
-    }
-
-    .timeline-labels {
-      display: flex;
-      gap: 1rem;
-      font-size: 0.625rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      opacity: 0.5;
-      font-weight: 300;
-    }
-
-    .timeline-label {
-      cursor: none;
-      transition: opacity 0.3s var(--ease);
-    }
-
-    .timeline-label:hover {
-      opacity: 1;
-    }
-
-    /* HERO SECTION - Split Screen */
-    .hero {
-      height: 100vh;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero-split {
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero-split-left {
-      background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 5vw;
-      border-right: 2px solid var(--color-primary);
-    }
-
-    .hero-split-right {
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero-split-bg {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      filter: grayscale(100%) contrast(1.2);
-      animation: slowZoom 20s ease-in-out infinite alternate;
-      will-change: transform;
-    }
-
-    @keyframes slowZoom {
-      from { transform: scale(1); }
-      to { transform: scale(1.1); }
-    }
-
-    /* Mobile: Disable heavy zoom animation */
-    @media (max-width: 768px) {
-      .hero-split-bg {
-        animation: none;
-        transform: scale(1.05);
-      }
-    }
-
-    .hero-split-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(45deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 100%);
-      mix-blend-mode: multiply;
-    }
-
-    .hero-title {
-      font-size: clamp(3rem, 10vw, 8rem);
-      font-weight: 700;
-      letter-spacing: -0.05em;
-      line-height: 0.9;
-      text-transform: uppercase;
-      opacity: 0;
-      transform: translateX(-50px);
-      animation: slideInLeft 1.2s var(--ease) 0.5s forwards;
-    }
-
-    @keyframes slideInLeft {
-      to {
-        opacity: 1;
-        transform: translateX(0);
-      }
-    }
-
-    .hero-subtitle {
-      font-size: clamp(1rem, 3vw, 2rem);
-      font-weight: 300;
-      letter-spacing: -0.02em;
-      margin-top: 2rem;
-      opacity: 0;
-      animation: slideInLeft 1.2s var(--ease) 0.8s forwards;
-      height: auto;
-      display: flex;
-      align-items: center;
-    }
-
-    .rotating-text {
-      font-style: italic;
-      position: relative;
-      display: inline-block;
-      min-width: 300px;
-      transition: opacity 0.3s var(--ease), transform 0.3s var(--ease);
-    }
-
-    .hero-tagline {
-      margin-top: 3rem;
-      font-size: 0.75rem;
-      letter-spacing: 0.3em;
-      opacity: 0;
-      animation: slideInLeft 1.2s var(--ease) 1.1s forwards;
-      font-weight: 300;
-      text-transform: uppercase;
-    }
-
-    @keyframes fadeInUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    /* MARQUEE */
-    .marquee {
-      background: var(--white);
-      color: var(--black);
-      padding: 1.5rem 0;
-      overflow: hidden;
-      white-space: nowrap;
-      border-top: 1px solid var(--black);
-      border-bottom: 1px solid var(--black);
-    }
-
-    .marquee-content {
-      display: inline-block;
-      padding-left: 100%;
-      animation: marquee 30s linear infinite;
-      font-size: 0.875rem;
-      letter-spacing: 0.2em;
-      font-weight: 500;
-    }
-
-    @keyframes marquee {
-      0% {
-        transform: translate(0, 0);
-      }
-      100% {
-        transform: translate(-100%, 0);
-      }
-    }
-
-    /* MAIN SECTIONS */
-    section {
-      padding: 8rem 5vw;
-      opacity: 0;
-      transform: translateY(80px);
-      transition: all 1s var(--ease);
-    }
-
-    section.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* PORTFOLIO GRID */
-    .portfolio-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-      gap: 2rem;
-      margin-top: 4rem;
-    }
-
-    .portfolio-item {
-      position: relative;
-      aspect-ratio: 16/10;
-      overflow: hidden;
-      background: var(--gray);
-      cursor: none;
-    }
-
-    .portfolio-item:nth-child(3n+1) {
-      grid-column: span 2;
-    }
-
-    .portfolio-item:nth-child(3n+2) {
-      grid-column: span 1;
-    }
-
-    .portfolio-item img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      filter: grayscale(100%);
-      transition: all 0.6s var(--ease);
-      transform-origin: center;
-      will-change: transform;
-    }
-
-    .portfolio-item:hover img {
-      filter: grayscale(0%);
-      transform: scale(1.05);
-    }
-
-    /* Mobile: Simplify portfolio interactions */
-    @media (max-width: 768px) {
-      .portfolio-item img {
-        filter: grayscale(50%);
-        will-change: auto;
-      }
-
-      .portfolio-item:active img {
-        filter: grayscale(0%);
-      }
-    }
-
-    .portfolio-info {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      padding: 2rem;
-      background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
-      transform: translateY(100%);
-      transition: transform 0.6s var(--ease);
-    }
-
-    .portfolio-item:hover .portfolio-info {
-      transform: translateY(0);
-    }
-
-    .portfolio-title {
-      font-size: 1.5rem;
-      font-weight: 600;
-      margin-bottom: 0.5rem;
-      letter-spacing: -0.02em;
-    }
-
-    .portfolio-meta {
-      font-size: 0.875rem;
-      opacity: 0.7;
-      font-weight: 300;
-    }
-
-    /* CHI SIAMO */
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1.5fr 1fr;
-      gap: 6rem;
-      margin-top: 4rem;
-    }
-
-    .manifesto {
-      font-size: 1.125rem;
-      line-height: 1.8;
-      font-weight: 300;
-      letter-spacing: -0.01em;
-    }
-
-    .quote-block {
-      position: relative;
-      padding-left: 3rem;
-    }
-
-    .quote-mark {
-      position: absolute;
-      left: 0;
-      top: -1rem;
-      font-size: 8rem;
-      line-height: 1;
-      opacity: 0.1;
-      font-style: italic;
-    }
-
-    .quote-text {
-      font-size: 2rem;
-      font-style: italic;
-      line-height: 1.4;
-      font-weight: 300;
-      letter-spacing: -0.02em;
-    }
-
-    /* PROGETTI IN SVILUPPO */
-    .dev-projects {
-      margin-top: 4rem;
-    }
-
-    .dev-project {
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-      padding: 3rem 0;
-      display: grid;
-      grid-template-columns: 2fr 3fr;
-      gap: 4rem;
-      transition: all 0.4s var(--ease);
-    }
-
-    .dev-project:hover {
-      padding-left: 2rem;
-      border-bottom-color: var(--white);
-    }
-
-    .dev-project-title {
-      font-size: 2rem;
-      font-weight: 600;
-      letter-spacing: -0.02em;
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    .dev-badge {
-      background: var(--white);
-      color: var(--black);
-      font-size: 0.625rem;
-      padding: 0.5rem 1rem;
-      border-radius: 2rem;
-      letter-spacing: 0.1em;
-      font-weight: 500;
-    }
-
-    .dev-project-meta {
-      font-size: 0.875rem;
-      opacity: 0.5;
-      margin-bottom: 1rem;
-      font-weight: 300;
-    }
-
-    .dev-project-desc {
-      font-size: 1rem;
-      line-height: 1.6;
-      font-weight: 300;
-    }
-
-    /* CONTATTI */
-    .contact-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 2rem;
-      margin-top: 4rem;
-    }
-
-    .contact-card {
-      border: 1px solid rgba(255,255,255,0.2);
-      padding: 3rem 2rem;
-      position: relative;
-      overflow: hidden;
-      transition: all 0.5s var(--ease);
-      cursor: none;
-    }
-
-    .contact-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 0;
-      height: 100%;
-      background: var(--white);
-      transition: width 0.5s var(--ease);
-      z-index: 1;
-    }
-
-    .contact-card:hover::before {
-      width: 100%;
-    }
-
-    .contact-card > * {
-      position: relative;
-      z-index: 2;
-      transition: color 0.3s var(--ease);
-    }
-
-    .contact-card:hover > * {
-      color: var(--black);
-    }
-
-    .contact-name {
-      font-size: 1.5rem;
-      font-weight: 600;
-      margin-bottom: 0.5rem;
-      letter-spacing: -0.02em;
-    }
-
-    .contact-role {
-      font-size: 0.875rem;
-      opacity: 0.6;
-      margin-bottom: 2rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      font-weight: 300;
-    }
-
-    .contact-card:hover .contact-role {
-      opacity: 0.5;
-    }
-
-    .contact-info {
-      font-size: 0.875rem;
-      line-height: 2;
-      font-weight: 400;
-    }
-
-    .contact-info a {
-      color: inherit;
-      text-decoration: none;
-      transition: opacity 0.3s var(--ease);
-    }
-
-    .contact-info a:hover {
-      opacity: 0.7;
-    }
-
-    /* SCENE TRANSITION EFFECTS */
-    section {
-      opacity: 0;
-      transform: translateY(80px);
-      transition: all 1s var(--ease);
-      position: relative;
-      overflow: hidden;
-    }
-
-    section.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* Add cinematic wipe effect */
-    section::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, var(--color-primary), transparent);
-      opacity: 0.05;
-      transition: left 0.8s var(--ease);
-      z-index: 1;
-    }
-
-    section.visible::before {
-      left: 100%;
-    }
-
-    /* Make sure content is above the wipe effect */
-    section > * {
-      position: relative;
-      z-index: 2;
-    }
-
-    /* RESPONSIVE */
-    @media (max-width: 768px) {
-      .hero {
-        grid-template-columns: 1fr;
-      }
-
-      .hero-split-right {
-        display: none;
-      }
-
-      .hero-split-left {
-        border-right: none;
-      }
-
-      .hero-title {
-        font-size: 3rem;
-      }
-
-      .hero-subtitle {
-        font-size: 1.2rem;
-      }
-
-      .rotating-text {
-        min-width: 200px;
-      }
-
-      .portfolio-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .portfolio-item:nth-child(3n+1),
-      .portfolio-item:nth-child(3n+2) {
-        grid-column: span 1;
-      }
-
-      .about-grid {
-        grid-template-columns: 1fr;
-        gap: 3rem;
-      }
-
-      .dev-project {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-      }
-
-      .contact-grid {
-        grid-template-columns: 1fr;
-      }
-
-      section {
-        padding: 4rem 1.5rem;
-      }
-
-      .grade-switcher {
-        top: 1rem;
-        right: 1rem;
-        flex-direction: row;
-        flex-wrap: wrap;
-      }
-
-      .grade-btn {
-        font-size: 0.625rem;
-        padding: 0.4rem 0.8rem;
-      }
-
-      .timeline-scrubber {
-        padding: 0 1rem;
-        height: 50px;
-      }
-
-      .timeline-labels {
-        display: none;
-      }
-
-      .cursor,
-      .cursor-follower {
-        display: none;
-      }
-
-      body {
-        cursor: default;
-        /* Reduce filter complexity on mobile */
-        filter: none !important;
-      }
-
-      .scanlines {
-        opacity: 0.3;
-      }
-
-      /* Add touch-action for better mobile performance */
-      * {
-        touch-action: manipulation;
-      }
-
-      /* Reduce motion for better performance */
-      .hero-split-bg,
-      .blade,
-      body::before {
-        animation-duration: 0s;
-      }
-
-      /* Optimize portfolio info for mobile */
-      .portfolio-info {
-        transform: translateY(0);
-        background: linear-gradient(to top, rgba(0,0,0,0.95), rgba(0,0,0,0.7));
-      }
-
-      /* Simplify transitions on mobile */
-      * {
-        transition-duration: 0.2s !important;
-      }
-
-      /* Reduce vignette on mobile */
-      body::after {
-        opacity: 0.3;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MOMENTUM — Collettivo Cinematografico</title>
+<meta name="description" content="MOMENTUM - Collettivo di registi, produttori e grafici. Raccontiamo storie ricercate e coraggiose, firmate da giovani autori che interrogano il presente.">
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Courier+Prime:wght@400;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --nero: #0a0a0a;
+  --grigio-scuro: #1a1a1a;
+  --grigio: #666;
+  --grigio-chiaro: #999;
+  --bianco-sporco: #f5f5f0;
+  --rosso-cinema: #c4302b;
+  --oro-vecchio: #b8860b;
+}
+
+body {
+  font-family: 'Inter', -apple-system, sans-serif;
+  background: var(--nero);
+  color: var(--bianco-sporco);
+  line-height: 1.6;
+  overflow-x: hidden;
+  cursor: default;
+}
+
+::selection {
+  background: var(--rosso-cinema);
+  color: var(--bianco-sporco);
+}
+
+/* FILM GRAIN EFFECT */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.03;
+  z-index: 10000;
+  pointer-events: none;
+  background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" /></filter><rect width="100" height="100" filter="url(%23noise)" opacity="1"/></svg>');
+}
+
+/* INTRO SCREEN */
+.intro-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: var(--nero);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 1s ease-out;
+}
+
+.intro-screen.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.intro-logo {
+  font-family: 'Courier Prime', monospace;
+  font-size: clamp(24px, 5vw, 48px);
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  animation: typewriter 2s steps(8) forwards;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 3px solid var(--bianco-sporco);
+}
+
+@keyframes typewriter {
+  from { width: 0; }
+  to { width: 8ch; }
+}
+
+@keyframes blink {
+  50% { border-color: transparent; }
+}
+
+.intro-logo.typing-done {
+  animation: blink 0.7s infinite;
+}
+
+/* NAVIGATION */
+nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  padding: 20px 40px;
+  background: linear-gradient(to bottom, rgba(10,10,10,0.95), transparent);
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
+
+nav.scrolled {
+  background: rgba(10,10,10,0.98);
+  backdrop-filter: blur(10px);
+  padding: 15px 40px;
+}
+
+.nav-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-family: 'Courier Prime', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--bianco-sporco);
+  text-decoration: none;
+}
+
+.nav-menu {
+  display: flex;
+  gap: 30px;
+  list-style: none;
+}
+
+.nav-link {
+  color: var(--grigio-chiaro);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  transition: color 0.3s ease;
+  position: relative;
+}
+
+.nav-link:hover {
+  color: var(--bianco-sporco);
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--rosso-cinema);
+  transition: width 0.3s ease;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+/* MOBILE MENU TOGGLE */
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--bianco-sporco);
+  font-size: 24px;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  nav {
+    padding: 15px 20px;
+  }
+  
+  .nav-menu {
+    display: none;
+    position: fixed;
+    top: 60px;
+    left: 0;
+    right: 0;
+    background: var(--nero);
+    flex-direction: column;
+    padding: 20px;
+    border-top: 1px solid var(--grigio-scuro);
+  }
+  
+  .nav-menu.active {
+    display: flex;
+  }
+  
+  .menu-toggle {
+    display: block;
+  }
+}
+
+/* HERO SECTION */
+.hero {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background: linear-gradient(to bottom, transparent, rgba(10,10,10,0.5)), var(--nero);
+}
+
+.hero-content {
+  text-align: center;
+  max-width: 800px;
+  padding: 0 20px;
+}
+
+.hero-title {
+  font-size: clamp(48px, 10vw, 120px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 20px;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeInUp 1s ease forwards;
+  animation-delay: 0.5s;
+}
+
+.hero-subtitle {
+  font-size: clamp(16px, 2vw, 20px);
+  font-weight: 300;
+  color: var(--grigio-chiaro);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 1s ease forwards;
+  animation-delay: 0.7s;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* MANIFESTO SECTION */
+.manifesto {
+  padding: 120px 40px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.manifesto-text {
+  font-size: clamp(20px, 3vw, 28px);
+  font-weight: 300;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+  text-align: center;
+  color: var(--bianco-sporco);
+}
+
+.manifesto-text strong {
+  font-weight: 500;
+  color: var(--rosso-cinema);
+}
+
+/* PROJECTS SECTION */
+.projects {
+  padding: 80px 40px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.section-title {
+  font-family: 'Courier Prime', monospace;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--grigio-chiaro);
+  margin-bottom: 10px;
+}
+
+.section-subtitle {
+  font-size: clamp(32px, 5vw, 48px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 40px;
+  margin-top: 60px;
+}
+
+.project-card {
+  background: var(--grigio-scuro);
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.5s ease, box-shadow 0.5s ease;
+  position: relative;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+.project-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+}
+
+.project-image {
+  width: 100%;
+  height: 220px;
+  background: linear-gradient(135deg, var(--grigio-scuro), var(--nero));
+  position: relative;
+  overflow: hidden;
+}
+
+/* FILM FRAME DECORATION */
+.project-image::before {
+  content: '';
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+  border: 1px solid rgba(255,255,255,0.1);
+  pointer-events: none;
+}
+
+.project-image::after {
+  content: '◉ REC';
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  color: var(--rosso-cinema);
+  font-family: 'Courier Prime', monospace;
+  font-size: 12px;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* PROJECT PHOTOS PLACEHOLDERS */
+.project-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(100%);
+  transition: filter 0.5s ease;
+}
+
+.project-card:hover .project-photo {
+  filter: grayscale(0%);
+}
+
+.project-info {
+  padding: 30px;
+}
+
+.project-title {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  letter-spacing: -0.02em;
+}
+
+.project-meta {
+  color: var(--grigio-chiaro);
+  font-size: 13px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+
+.project-meta span {
+  color: var(--bianco-sporco);
+}
+
+.project-status {
+  display: inline-block;
+  padding: 4px 12px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin: 15px 0;
+  border: 1px solid;
+}
+
+.status-post {
+  color: var(--oro-vecchio);
+  border-color: var(--oro-vecchio);
+}
+
+.status-distribution {
+  color: var(--rosso-cinema);
+  border-color: var(--rosso-cinema);
+}
+
+.status-development {
+  color: var(--grigio-chiaro);
+  border-color: var(--grigio-chiaro);
+}
+
+.project-synopsis {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--grigio-chiaro);
+  margin-top: 15px;
+}
+
+/* TEAM SECTION */
+.team {
+  padding: 80px 40px;
+  background: var(--grigio-scuro);
+}
+
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 40px;
+  max-width: 1000px;
+  margin: 60px auto 0;
+}
+
+.team-member {
+  text-align: center;
+  opacity: 0;
+  animation: fadeIn 1s ease forwards;
+}
+
+.team-member:nth-child(1) { animation-delay: 0.1s; }
+.team-member:nth-child(2) { animation-delay: 0.2s; }
+.team-member:nth-child(3) { animation-delay: 0.3s; }
+.team-member:nth-child(4) { animation-delay: 0.4s; }
+.team-member:nth-child(5) { animation-delay: 0.5s; }
+.team-member:nth-child(6) { animation-delay: 0.6s; }
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+.member-photo {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--grigio), var(--grigio-scuro));
+  margin: 0 auto 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.member-photo::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle, transparent, rgba(0,0,0,0.3));
+}
+
+.member-name {
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  margin-bottom: 5px;
+}
+
+.member-role {
+  font-size: 13px;
+  color: var(--grigio-chiaro);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* CONTACT SECTION */
+.contact {
+  padding: 80px 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 40px;
+  margin-top: 60px;
+}
+
+.contact-card {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.05);
+  padding: 30px;
+  transition: background 0.3s ease;
+}
+
+.contact-card:hover {
+  background: rgba(255,255,255,0.04);
+}
+
+.contact-name {
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 20px;
+  color: var(--bianco-sporco);
+}
+
+.contact-info {
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.contact-info a {
+  color: var(--grigio-chiaro);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.contact-info a:hover {
+  color: var(--bianco-sporco);
+}
+
+/* FOOTER */
+footer {
+  padding: 40px;
+  text-align: center;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+.footer-content {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.footer-logo {
+  font-family: 'Courier Prime', monospace;
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  margin-bottom: 20px;
+  opacity: 0.8;
+}
+
+.footer-info {
+  font-size: 12px;
+  color: var(--grigio);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.cta-button {
+  display: inline-block;
+  margin-top: 30px;
+  padding: 15px 40px;
+  background: none;
+  border: 2px solid var(--bianco-sporco);
+  color: var(--bianco-sporco);
+  font-family: 'Courier Prime', monospace;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.cta-button:hover {
+  background: var(--bianco-sporco);
+  color: var(--nero);
+  transform: translateX(5px);
+}
+
+/* FILM STRIP DECORATION */
+.film-strip {
+  position: fixed;
+  top: 50%;
+  left: -50px;
+  width: 40px;
+  height: 200px;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 10px,
+    var(--grigio-scuro) 10px,
+    var(--grigio-scuro) 20px
+  );
+  opacity: 0.1;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.film-strip.right {
+  left: auto;
+  right: -50px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .projects-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .team-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .contact-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .manifesto {
+    padding: 60px 20px;
+  }
+  
+  .projects, .team, .contact {
+    padding: 60px 20px;
+  }
+}
+
+/* SMOOTH SCROLL */
+html {
+  scroll-behavior: smooth;
+}
+
+/* LOADING ANIMATIONS */
+.fade-in-section {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.8s ease;
+}
+
+.fade-in-section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+</style>
 </head>
-<body data-grade="default">
-  <!-- APERTURE LOADER -->
-  <div class="aperture-loader" id="apertureLoader">
-    <div class="aperture">
-      <div class="blade"></div>
-      <div class="blade"></div>
-      <div class="blade"></div>
-      <div class="blade"></div>
-      <div class="blade"></div>
-      <div class="blade"></div>
+<body>
+
+<!-- Intro Screen -->
+<div class="intro-screen" id="introScreen">
+  <div class="intro-logo" id="introLogo">MOMENTUM</div>
+</div>
+
+<!-- Film Strip Decorations -->
+<div class="film-strip"></div>
+<div class="film-strip right"></div>
+
+<!-- Navigation -->
+<nav id="navbar">
+  <div class="nav-container">
+    <a href="#" class="logo">MOMENTUM</a>
+    <button class="menu-toggle" id="menuToggle">☰</button>
+    <ul class="nav-menu" id="navMenu">
+      <li><a href="#manifesto" class="nav-link">Manifesto</a></li>
+      <li><a href="#projects" class="nav-link">Progetti</a></li>
+      <li><a href="#team" class="nav-link">Collettivo</a></li>
+      <li><a href="#contact" class="nav-link">Contatti</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero">
+  <div class="hero-content">
+    <h1 class="hero-title">MOMENTUM</h1>
+    <p class="hero-subtitle">Collettivo Cinematografico</p>
+  </div>
+</section>
+
+<!-- Manifesto Section -->
+<section class="manifesto fade-in-section" id="manifesto">
+  <div class="manifesto-text">
+    Momentum è un collettivo di registi, produttori e grafici con anni di esperienza nell'audiovisivo cinematografico. 
+    Raccontiamo storie <strong>ricercate</strong> e <strong>coraggiose</strong>, firmate da giovani autori che interrogano il presente. 
+    Ci muove un approccio estremo, ossessivo. Schiavi delle storie di cui ci prendiamo cura.
+  </div>
+</section>
+
+<!-- Projects Section -->
+<section class="projects fade-in-section" id="projects">
+  <div class="section-header">
+    <h2 class="section-title">I Nostri Lavori</h2>
+    <h3 class="section-subtitle">Storie in Movimento</h3>
+  </div>
+  
+  <div class="projects-grid">
+    <!-- IN A ROW -->
+    <div class="project-card">
+      <div class="project-image">
+        <!-- Placeholder per foto - puoi sostituire con immagini reali -->
+      </div>
+      <div class="project-info">
+        <h3 class="project-title">IN A ROW</h3>
+        <p class="project-meta">Regia: <span>Rocco Zaupa</span></p>
+        <p class="project-meta">Anno: <span>2024</span></p>
+        <p class="project-meta">Genere: <span>Sperimentale/Fotoromanzo</span></p>
+        <span class="project-status status-post">Post-produzione</span>
+        <p class="project-synopsis">Durante un set, una regista disillusa e un'attrice insicura si scontrano ripetendo ossessivamente la stessa scena, fino a scoprire un legame nascosto nei frammenti della memoria.</p>
+      </div>
+    </div>
+
+    <!-- HOME -->
+    <div class="project-card">
+      <div class="project-image">
+        <!-- Placeholder per foto -->
+      </div>
+      <div class="project-info">
+        <h3 class="project-title">HOME</h3>
+        <p class="project-meta">Regia: <span>Milena Karaeva</span></p>
+        <p class="project-meta">Anno: <span>2025</span></p>
+        <p class="project-meta">Genere: <span>Romantico-Drammatico</span></p>
+        <span class="project-status status-distribution">Distribuzione</span>
+        <p class="project-synopsis">Emilia e Davide tornano sulle rive del lago alpino dove si sono incontrati anni prima. È un giorno di passaggio, sospeso tra passato e futuro.</p>
+      </div>
+    </div>
+
+    <!-- RUGGINE -->
+    <div class="project-card">
+      <div class="project-image">
+        <!-- Placeholder per foto -->
+      </div>
+      <div class="project-info">
+        <h3 class="project-title">RUGGINE</h3>
+        <p class="project-meta">Regia: <span>Melissa Palmeri - Riccardo Berca</span></p>
+        <p class="project-meta">Anno: <span>2024</span></p>
+        <p class="project-meta">Genere: <span>Drammatico/Dark Fantasy</span></p>
+        <span class="project-status status-distribution">Distribuzione</span>
+        <p class="project-synopsis">In un mondo rurale e fiabesco, un viandante e il suo cane Ruggine giungono in un remoto villaggio montano, dove un misterioso macellaio gli svela un segreto oscuro.</p>
+      </div>
+    </div>
+
+    <!-- S H -->
+    <div class="project-card">
+      <div class="project-image">
+        <!-- Placeholder per foto -->
+      </div>
+      <div class="project-info">
+        <h3 class="project-title">S H</h3>
+        <p class="project-meta">Regia: <span>Fedor Pavlov</span></p>
+        <p class="project-meta">Anno: <span>2026</span></p>
+        <p class="project-meta">Genere: <span>Thriller/Sci-fi</span></p>
+        <span class="project-status status-development">Sviluppo</span>
+        <p class="project-synopsis">Un uomo conduce una vita in solitudine a bordo di un furgone di consegne. Un viaggio misterioso verso una destinazione sconosciuta.</p>
+      </div>
+    </div>
+
+    <!-- MALOCCHIO -->
+    <div class="project-card">
+      <div class="project-image">
+        <!-- Placeholder per foto -->
+      </div>
+      <div class="project-info">
+        <h3 class="project-title">MALOCCHIO</h3>
+        <p class="project-meta">Regia: <span>Leandro Reis</span></p>
+        <p class="project-meta">Anno: <span>2025</span></p>
+        <p class="project-meta">Genere: <span>Grottesco</span></p>
+        <span class="project-status status-development">Sviluppo</span>
+        <p class="project-synopsis">Dopo la morte del fratello, Diógenes lascia il Brasile per Torino per liberarsi da una maledizione. L'occultista Trevolte accetta di aiutarlo.</p>
+      </div>
     </div>
   </div>
+</section>
 
-  <!-- VHS SCANLINES -->
-  <div class="scanlines"></div>
-
-  <!-- GLITCH OVERLAY -->
-  <div class="glitch-overlay" id="glitchOverlay"></div>
-
-  <!-- Custom Cursor -->
-  <div class="cursor"></div>
-  <div class="cursor-follower"></div>
-
-  <!-- COLOR GRADING SWITCHER -->
-  <div class="grade-switcher">
-    <div class="grade-label">Color Grade</div>
-    <button class="grade-btn active" data-grade="default">Default</button>
-    <button class="grade-btn" data-grade="noir">Noir</button>
-    <button class="grade-btn" data-grade="technicolor">Technicolor</button>
-    <button class="grade-btn" data-grade="bleach">Bleach</button>
-    <button class="grade-btn" data-grade="cyberpunk">Cyberpunk</button>
+<!-- Team Section -->
+<section class="team fade-in-section" id="team">
+  <div class="section-header">
+    <h2 class="section-title">Il Collettivo</h2>
+    <h3 class="section-subtitle">Le Persone Dietro le Storie</h3>
   </div>
-
-  <!-- TIMELINE SCRUBBER -->
-  <div class="timeline-scrubber">
-    <div class="timeline-labels">
-      <div class="timeline-label" data-section="hero">00:00</div>
-      <div class="timeline-label" data-section="portfolio">00:15</div>
-      <div class="timeline-label" data-section="about">00:30</div>
-      <div class="timeline-label" data-section="development">00:45</div>
-      <div class="timeline-label" data-section="contact">01:00</div>
+  
+  <div class="team-grid">
+    <div class="team-member">
+      <div class="member-photo"></div>
+      <h4 class="member-name">Rocco Zaupa</h4>
+      <p class="member-role">Regista & Produttore</p>
     </div>
-    <div class="timeline-track">
-      <div class="timeline-progress" id="timelineProgress"></div>
-      <div class="timeline-marker" id="timelineMarker" style="left: 0%"></div>
+    
+    <div class="team-member">
+      <div class="member-photo"></div>
+      <h4 class="member-name">Fedor Pavlov</h4>
+      <p class="member-role">Regista & Sceneggiatore</p>
     </div>
-  </div>
-
-  <!-- HERO - SPLIT SCREEN -->
-  <section class="hero" id="hero">
-    <div class="hero-split hero-split-left">
-      <h1 class="hero-title">MOMENTUM</h1>
-      <div class="hero-subtitle">
-        <span class="rotating-text">storie coraggiose</span>
-      </div>
-      <div class="hero-tagline">Collettivo Cinematografico — Torino</div>
+    
+    <div class="team-member">
+      <div class="member-photo"></div>
+      <h4 class="member-name">Indrit Metuku</h4>
+      <p class="member-role">Produttore</p>
     </div>
-    <div class="hero-split hero-split-right">
-      <img class="hero-split-bg" src="https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=1600&q=80" alt="Cinema">
-      <div class="hero-split-overlay"></div>
+    
+    <div class="team-member">
+      <div class="member-photo"></div>
+      <h4 class="member-name">Riccardo Berca</h4>
+      <p class="member-role">Regista</p>
     </div>
-  </section>
-
-  <!-- MARQUEE -->
-  <div class="marquee">
-    <div class="marquee-content">
-      TORINO FILM FESTIVAL • CINEMA D'AUTORE • DISTRIBUZIONE INTERNAZIONALE •
-      TORINO FILM FESTIVAL • CINEMA D'AUTORE • DISTRIBUZIONE INTERNAZIONALE •
-      TORINO FILM FESTIVAL • CINEMA D'AUTORE • DISTRIBUZIONE INTERNAZIONALE •
+    
+    <div class="team-member">
+      <div class="member-photo"></div>
+      <h4 class="member-name">Bruno Brunelli</h4>
+      <p class="member-role">Direttore Fotografia</p>
+    </div>
+    
+    <div class="team-member">
+      <div class="member-photo"></div>
+      <h4 class="member-name">Denisa Kola</h4>
+      <p class="member-role">Producer</p>
     </div>
   </div>
+</section>
 
-  <!-- 01 PORTFOLIO -->
-  <section id="portfolio">
-    <div class="section-number">01 — PORTFOLIO</div>
-
-    <div class="portfolio-grid">
-      <div class="portfolio-item">
-        <img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?w=1200&q=80" alt="ina row">
-        <div class="portfolio-info">
-          <div class="portfolio-title">ina row</div>
-          <div class="portfolio-meta">Rocco Zaupa, 2024 • Sperimentale</div>
-        </div>
-      </div>
-
-      <div class="portfolio-item">
-        <img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=800&q=80" alt="Ritorno al Lago">
-        <div class="portfolio-info">
-          <div class="portfolio-title">Ritorno al Lago</div>
-          <div class="portfolio-meta">Milena Karaeva, 2025 • Drammatico</div>
-        </div>
-      </div>
-
-      <div class="portfolio-item">
-        <img src="https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=1200&q=80" alt="Il Macellaio">
-        <div class="portfolio-info">
-          <div class="portfolio-title">Il Macellaio</div>
-          <div class="portfolio-meta">Palmeri/Berca, 2024 • Dark Fantasy</div>
-        </div>
-      </div>
-
-      <div class="portfolio-item">
-        <img src="https://images.unsplash.com/photo-1594908900066-3f47337549d8?w=800&q=80" alt="Progetto Cinema">
-        <div class="portfolio-info">
-          <div class="portfolio-title">Archivio Visivo</div>
-          <div class="portfolio-meta">Collettivo Momentum, 2024</div>
-        </div>
+<!-- Contact Section -->
+<section class="contact fade-in-section" id="contact">
+  <div class="section-header">
+    <h2 class="section-title">Production Contacts</h2>
+    <h3 class="section-subtitle">Iniziamo un Progetto Insieme</h3>
+  </div>
+  
+  <div class="contact-grid">
+    <div class="contact-card">
+      <h4 class="contact-name">Rocco Zaupa</h4>
+      <div class="contact-info">
+        <p><a href="tel:+393348441166">+39 334 844 1166</a></p>
+        <p><a href="mailto:roccozaupa@gmail.com">roccozaupa@gmail.com</a></p>
+        <p>P.IVA 04558630242</p>
       </div>
     </div>
-  </section>
-
-  <!-- 02 CHI SIAMO -->
-  <section id="about">
-    <div class="section-number">02 — MANIFESTO</div>
-
-    <div class="about-grid">
-      <div class="manifesto">
-        <p>Momentum è un collettivo cinematografico indipendente con base a Torino, dedito alla produzione e distribuzione di opere visionarie che sfidano i confini del cinema convenzionale.</p>
-        <br>
-        <p>Crediamo in storie coraggiose, ossessive, ricercate. Lavoriamo con registi che hanno qualcosa da dire e che non accettano compromessi nella loro visione artistica.</p>
-        <br>
-        <p>Dal documentario sperimentale al dark fantasy, dalla ricerca visiva al cinema d'autore, ogni progetto è un'esplorazione radicale del linguaggio cinematografico.</p>
-      </div>
-
-      <div class="quote-block">
-        <div class="quote-mark">"</div>
-        <div class="quote-text">Non facciamo cinema per compiacere. Lo facciamo perché non possiamo farne a meno.</div>
+    
+    <div class="contact-card">
+      <h4 class="contact-name">Fedor Pavlov</h4>
+      <div class="contact-info">
+        <p><a href="tel:+393883236011">+39 388 323 6011</a></p>
+        <p><a href="mailto:fpavlovo@gmail.com">fpavlovo@gmail.com</a></p>
+        <p>Freelance</p>
       </div>
     </div>
-  </section>
-
-  <!-- 03 PROGETTI IN SVILUPPO -->
-  <section id="development">
-    <div class="section-number">03 — IN SVILUPPO</div>
-
-    <div class="dev-projects">
-      <div class="dev-project">
-        <div class="dev-project-title">
-          Untitled Thriller
-          <span class="dev-badge">SVILUPPO</span>
-        </div>
-        <div>
-          <div class="dev-project-meta">Fedor Pavlov • Thriller Psicologico</div>
-          <div class="dev-project-desc">
-            Un'esplorazione claustrofobica della paranoia urbana. Un uomo scopre che la sua vita è stata meticolosamente orchestrata da una presenza invisibile. Produzione prevista 2025.
-          </div>
-        </div>
-      </div>
-
-      <div class="dev-project">
-        <div class="dev-project-title">
-          Cadáveres Exquisitos
-          <span class="dev-badge">SVILUPPO</span>
-        </div>
-        <div>
-          <div class="dev-project-meta">Leandro Reis • Grottesco</div>
-          <div class="dev-project-desc">
-            Una commedia nera che decostruisce i rituali della classe media attraverso il surrealismo visivo e il body horror. Un'opera che sfida ogni convenzione narrativa.
-          </div>
-        </div>
-      </div>
-
-      <div class="dev-project">
-        <div class="dev-project-title">
-          La Memoria Dell'Acqua
-          <span class="dev-badge">SVILUPPO</span>
-        </div>
-        <div>
-          <div class="dev-project-meta">Indrit Metuku • Documentario Poetico</div>
-          <div class="dev-project-desc">
-            Un viaggio visivo attraverso i corsi d'acqua d'Europa, esplorando la memoria collettiva attraverso il linguaggio del fiume. Fotografia analogica 16mm.
-          </div>
-        </div>
+    
+    <div class="contact-card">
+      <h4 class="contact-name">Indrit Metuku</h4>
+      <div class="contact-info">
+        <p><a href="tel:+393204909668">+39 320 490 9668</a></p>
+        <p><a href="mailto:indritmetuku@gmail.com">indritmetuku@gmail.com</a></p>
+        <p>Freelance</p>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- 04 CONTATTI -->
-  <section id="contact">
-    <div class="section-number">04 — CONTATTI</div>
+<!-- Footer -->
+<footer>
+  <div class="footer-content">
+    <div class="footer-logo">MOMENTUM</div>
+    <p class="footer-info">Collettivo Cinematografico · Torino · Italia</p>
+    <button class="cta-button" onclick="location.href='mailto:roccozaupa@gmail.com?subject=Nuovo%20Progetto%20Cinematografico'">
+      Iniziamo un Progetto →
+    </button>
+  </div>
+</footer>
 
-    <div class="contact-grid">
-      <div class="contact-card">
-        <div class="contact-name">Rocco Zaupa</div>
-        <div class="contact-role">Fondatore & Regista</div>
-        <div class="contact-info">
-          <div>+39 320 490 9668</div>
-          <div><a href="mailto:rocco@momentum.film">rocco@momentum.film</a></div>
-          <div><a href="https://linkedin.com/in/roccozaupa" target="_blank">LinkedIn</a></div>
-        </div>
-      </div>
+<script>
+// Intro Animation
+window.addEventListener('load', () => {
+  const introScreen = document.getElementById('introScreen');
+  const introLogo = document.getElementById('introLogo');
+  
+  setTimeout(() => {
+    introLogo.classList.add('typing-done');
+  }, 2000);
+  
+  setTimeout(() => {
+    introScreen.classList.add('fade-out');
+  }, 2800);
+});
 
-      <div class="contact-card">
-        <div class="contact-name">Fedor Pavlov</div>
-        <div class="contact-role">Regista & Sceneggiatore</div>
-        <div class="contact-info">
-          <div>+39 345 678 9012</div>
-          <div><a href="mailto:fedor@momentum.film">fedor@momentum.film</a></div>
-          <div><a href="https://linkedin.com/in/fedorpavlov" target="_blank">LinkedIn</a></div>
-        </div>
-      </div>
+// Navigation Scroll Effect
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 50) {
+    navbar.classList.add('scrolled');
+  } else {
+    navbar.classList.remove('scrolled');
+  }
+});
 
-      <div class="contact-card">
-        <div class="contact-name">Indrit Metuku</div>
-        <div class="contact-role">Producer & Distribution</div>
-        <div class="contact-info">
-          <div>+39 334 567 8901</div>
-          <div><a href="mailto:indrit@momentum.film">indrit@momentum.film</a></div>
-          <div><a href="https://linkedin.com/in/indritmetuku" target="_blank">LinkedIn</a></div>
-        </div>
-      </div>
-    </div>
-  </section>
+// Mobile Menu Toggle
+const menuToggle = document.getElementById('menuToggle');
+const navMenu = document.getElementById('navMenu');
 
-  <script>
-    // APERTURE LOADER - Optimized for mobile
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || window.innerWidth <= 768;
-    const loaderDuration = isMobile ? 800 : 2000; // Faster on mobile
+menuToggle.addEventListener('click', () => {
+  navMenu.classList.toggle('active');
+  menuToggle.textContent = navMenu.classList.contains('active') ? '✕' : '☰';
+});
 
-    // Hide loader function
-    function hideLoader() {
-      const loader = document.getElementById('apertureLoader');
-      if (loader && !loader.classList.contains('hidden')) {
-        loader.classList.add('hidden');
-        setTimeout(() => {
-          loader.style.display = 'none';
-        }, 600);
-      }
+// Close menu when clicking on a link
+document.querySelectorAll('.nav-link').forEach(link => {
+  link.addEventListener('click', () => {
+    navMenu.classList.remove('active');
+    menuToggle.textContent = '☰';
+  });
+});
+
+// Fade In Animation on Scroll
+const observerOptions = {
+  threshold: 0.1,
+  rootMargin: '0px 0px -50px 0px'
+};
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
     }
+  });
+}, observerOptions);
 
-    // Multiple strategies to ensure loader always closes
-    // 1. On DOMContentLoaded (faster for mobile)
-    document.addEventListener('DOMContentLoaded', () => {
-      if (isMobile) {
-        setTimeout(hideLoader, loaderDuration);
-      }
-    });
+document.querySelectorAll('.fade-in-section').forEach(section => {
+  observer.observe(section);
+});
 
-    // 2. On full load
-    window.addEventListener('load', () => {
-      setTimeout(hideLoader, isMobile ? 500 : loaderDuration);
-    });
+// Project Cards Hover Effect
+document.querySelectorAll('.project-card').forEach(card => {
+  card.addEventListener('mouseenter', function() {
+    this.style.transform = 'translateY(-5px) scale(1.02)';
+  });
+  
+  card.addEventListener('mouseleave', function() {
+    this.style.transform = 'translateY(0) scale(1)';
+  });
+});
 
-    // 3. Failsafe - always hide after max time
-    setTimeout(hideLoader, isMobile ? 1500 : 3000);
+// Add some film-like flicker effect occasionally
+setInterval(() => {
+  if (Math.random() > 0.98) {
+    document.body.style.opacity = '0.98';
+    setTimeout(() => {
+      document.body.style.opacity = '1';
+    }, 50);
+  }
+}, 2000);
 
-    // COLOR GRADING SWITCHER
-    const gradeButtons = document.querySelectorAll('.grade-btn');
-    gradeButtons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const grade = btn.dataset.grade;
-        document.body.setAttribute('data-grade', grade);
+// Console Message
+console.log('%c MOMENTUM ', 'background: #c4302b; color: #f5f5f0; font-size: 20px; padding: 10px; font-family: Courier Prime;');
+console.log('%c Collettivo Cinematografico Torinese ', 'color: #666; font-size: 12px;');
+</script>
 
-        gradeButtons.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-
-        // Trigger glitch effect on grade change
-        triggerGlitch();
-      });
-    });
-
-    // GLITCH EFFECT
-    const glitchOverlay = document.getElementById('glitchOverlay');
-
-    function triggerGlitch() {
-      glitchOverlay.classList.add('active');
-      setTimeout(() => {
-        glitchOverlay.classList.remove('active');
-      }, 300);
-    }
-
-    // Random glitch effects - Disabled on mobile for performance
-    if (!isMobile) {
-      setInterval(() => {
-        if (Math.random() > 0.95) {
-          triggerGlitch();
-        }
-      }, 3000);
-    }
-
-    // TIMELINE SCRUBBER
-    const timelineProgress = document.getElementById('timelineProgress');
-    const timelineMarker = document.getElementById('timelineMarker');
-    const timelineTrack = document.querySelector('.timeline-track');
-    const timelineLabels = document.querySelectorAll('.timeline-label');
-
-    function updateTimeline() {
-      const scrollPercent = (window.pageYOffset / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
-      timelineProgress.style.width = scrollPercent + '%';
-      timelineMarker.style.left = scrollPercent + '%';
-    }
-
-    window.addEventListener('scroll', updateTimeline);
-
-    // Click on timeline to navigate
-    timelineTrack.addEventListener('click', (e) => {
-      const rect = timelineTrack.getBoundingClientRect();
-      const percent = (e.clientX - rect.left) / rect.width;
-      const scrollTo = (document.documentElement.scrollHeight - window.innerHeight) * percent;
-      window.scrollTo({ top: scrollTo, behavior: 'smooth' });
-      triggerGlitch();
-    });
-
-    // Timeline labels navigation
-    timelineLabels.forEach(label => {
-      label.addEventListener('click', () => {
-        const sectionId = label.dataset.section;
-        const section = document.getElementById(sectionId);
-        if (section) {
-          section.scrollIntoView({ behavior: 'smooth' });
-          triggerGlitch();
-        }
-      });
-    });
-
-    // CUSTOM CURSOR - Disabled on mobile for performance
-    if (!isMobile) {
-      const cursor = document.querySelector('.cursor');
-      const cursorFollower = document.querySelector('.cursor-follower');
-
-      let mouseX = 0;
-      let mouseY = 0;
-      let followerX = 0;
-      let followerY = 0;
-
-      document.addEventListener('mousemove', (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-        cursor.style.transform = `translate(${mouseX - 4}px, ${mouseY - 4}px)`;
-      });
-
-      function animateFollower() {
-        const distX = mouseX - followerX;
-        const distY = mouseY - followerY;
-
-        followerX += distX * 0.1;
-        followerY += distY * 0.1;
-
-        cursorFollower.style.transform = `translate(${followerX - 20}px, ${followerY - 20}px)`;
-
-        requestAnimationFrame(animateFollower);
-      }
-      animateFollower();
-
-      // Hover effect on interactive elements
-      const interactiveElements = document.querySelectorAll('.portfolio-item, .contact-card, a, button, .timeline-label');
-      interactiveElements.forEach(el => {
-        el.addEventListener('mouseenter', () => {
-          cursorFollower.classList.add('hover');
-        });
-        el.addEventListener('mouseleave', () => {
-          cursorFollower.classList.remove('hover');
-        });
-      });
-    }
-
-    // ROTATING SUBTITLE
-    const rotatingText = document.querySelector('.rotating-text');
-    const texts = ['storie coraggiose', 'storie ossessive', 'storie ricercate', 'storie visionarie'];
-    let currentIndex = 0;
-
-    setInterval(() => {
-      currentIndex = (currentIndex + 1) % texts.length;
-      rotatingText.style.opacity = '0';
-      rotatingText.style.transform = 'translateY(-20px)';
-
-      setTimeout(() => {
-        rotatingText.textContent = texts[currentIndex];
-        rotatingText.style.opacity = '1';
-        rotatingText.style.transform = 'translateY(0)';
-      }, 300);
-    }, 3000);
-
-    rotatingText.style.transition = 'opacity 0.3s var(--ease), transform 0.3s var(--ease)';
-
-    // PARALLAX HERO & SPLIT SCREEN - Simplified on mobile
-    const hero = document.querySelector('.hero');
-    const heroTitle = document.querySelector('.hero-title');
-    const heroSplitRight = document.querySelector('.hero-split-right');
-    const heroSplitBg = document.querySelector('.hero-split-bg');
-
-    if (!isMobile) {
-      window.addEventListener('scroll', () => {
-        const scrolled = window.pageYOffset;
-        const heroHeight = hero.offsetHeight;
-
-        if (scrolled < heroHeight) {
-          const opacity = 1 - scrolled / heroHeight;
-          const translateY = scrolled * 0.5;
-
-          heroTitle.style.opacity = opacity;
-          heroTitle.style.transform = `translateX(0) translateY(${translateY}px)`;
-
-          if (heroSplitBg) {
-            heroSplitBg.style.transform = `scale(1.1) translateY(${scrolled * 0.3}px)`;
-          }
-        }
-      });
-    }
-
-    // SCROLL REVEAL
-    const sections = document.querySelectorAll('section');
-
-    const revealSection = () => {
-      sections.forEach(section => {
-        const sectionTop = section.getBoundingClientRect().top;
-        const windowHeight = window.innerHeight;
-
-        if (sectionTop < windowHeight * 0.75) {
-          section.classList.add('visible');
-        }
-      });
-    };
-
-    window.addEventListener('scroll', revealSection);
-    revealSection();
-
-    // MAGNETIC EFFECT ON IMAGES - Disabled on mobile for performance
-    if (!isMobile) {
-      const portfolioItems = document.querySelectorAll('.portfolio-item');
-
-      portfolioItems.forEach(item => {
-        const img = item.querySelector('img');
-
-        item.addEventListener('mousemove', (e) => {
-          const rect = item.getBoundingClientRect();
-          const x = e.clientX - rect.left;
-          const y = e.clientY - rect.top;
-
-          const centerX = rect.width / 2;
-          const centerY = rect.height / 2;
-
-          const deltaX = (x - centerX) / centerX;
-          const deltaY = (y - centerY) / centerY;
-
-          img.style.transform = `scale(1.05) translate(${deltaX * 20}px, ${deltaY * 20}px)`;
-        });
-
-        item.addEventListener('mouseleave', () => {
-          img.style.transform = 'scale(1) translate(0, 0)';
-        });
-      });
-    }
-
-    // MARQUEE DUPLICATION FOR SEAMLESS LOOP
-    const marqueeContent = document.querySelector('.marquee-content');
-    marqueeContent.innerHTML = marqueeContent.innerHTML + marqueeContent.innerHTML;
-  </script>
 </body>
 </html>
