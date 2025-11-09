@@ -1,668 +1,65 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Primary Meta Tags -->
+  <title>MOMENTUM — Collettivo Cinematografico Torinese</title>
+  <meta name="title" content="MOMENTUM — Collettivo Cinematografico Torinese">
+  <meta name="description" content="Collettivo di registi, produttori e grafici. Raccontiamo storie ricercate e coraggiose, firmate da giovani autori che interrogano il presente. Torino, Italia.">
+  <meta name="keywords" content="cinema, filmmaking, collettivo, Torino, film, cortometraggi, produzione, cinematografia, Italia">
+  <meta name="author" content="MOMENTUM Collective">
+  <meta name="robots" content="index, follow">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://momentum.com/">
+  <meta property="og:title" content="MOMENTUM — Collettivo Cinematografico Torinese">
+  <meta property="og:description" content="Collettivo di registi, produttori e grafici. Raccontiamo storie ricercate e coraggiose. Torino, Italia.">
+  <meta property="og:image" content="./assets/img/inaRow.jpg">
+  <meta property="og:locale" content="it_IT">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://momentum.com/">
+  <meta property="twitter:title" content="MOMENTUM — Collettivo Cinematografico Torinese">
+  <meta property="twitter:description" content="Collettivo di registi, produttori e grafici. Raccontiamo storie ricercate e coraggiose. Torino, Italia.">
+  <meta property="twitter:image" content="./assets/img/inaRow.jpg">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>">
+
+  <!-- Web App Manifest -->
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#c4302b">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="MOMENTUM">
+
+  <!-- Performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+
   <link rel="stylesheet" href="./css/style.css">
-<script src="./js/main.js" defer></script>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MOMENTUM — Collettivo Cinematografico</title>
-<meta name="description" content="MOMENTUM - Collettivo di registi, produttori e grafici. Raccontiamo storie ricercate e coraggiose, firmate da giovani autori che interrogano il presente.">
-
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Courier+Prime:wght@400;700&display=swap');
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-:root {
-  --nero: #0a0a0a;
-  --grigio-scuro: #1a1a1a;
-  --grigio: #666;
-  --grigio-chiaro: #999;
-  --bianco-sporco: #f5f5f0;
-  --rosso-cinema: #c4302b;
-  --oro-vecchio: #b8860b;
-}
-
-body {
-  font-family: 'Inter', -apple-system, sans-serif;
-  background: var(--nero);
-  color: var(--bianco-sporco);
-  line-height: 1.6;
-  overflow-x: hidden;
-  cursor: default;
-}
-
-::selection {
-  background: var(--rosso-cinema);
-  color: var(--bianco-sporco);
-}
-
-/* FILM GRAIN EFFECT */
-body::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0.03;
-  z-index: 10000;
-  pointer-events: none;
-  background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" /></filter><rect width="100" height="100" filter="url(%23noise)" opacity="1"/></svg>');
-}
-
-/* INTRO SCREEN */
-.intro-screen {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-  background: var(--nero);
-  z-index: 9999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: opacity 1s ease-out;
-}
-
-.intro-screen.fade-out {
-  opacity: 0;
-  pointer-events: none;
-}
-
-.intro-logo {
-  font-family: 'Courier Prime', monospace;
-  font-size: clamp(24px, 5vw, 48px);
-  font-weight: 700;
-  letter-spacing: 0.2em;
-  animation: typewriter 2s steps(8) forwards;
-  overflow: hidden;
-  white-space: nowrap;
-  border-right: 3px solid var(--bianco-sporco);
-}
-
-@keyframes typewriter {
-  from { width: 0; }
-  to { width: 8ch; }
-}
-
-@keyframes blink {
-  50% { border-color: transparent; }
-}
-
-.intro-logo.typing-done {
-  animation: blink 0.7s infinite;
-}
-
-/* NAVIGATION */
-nav {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  padding: 20px 40px;
-  background: linear-gradient(to bottom, rgba(10,10,10,0.95), transparent);
-  z-index: 1000;
-  transition: all 0.3s ease;
-}
-
-nav.scrolled {
-  background: rgba(10,10,10,0.98);
-  backdrop-filter: blur(10px);
-  padding: 15px 40px;
-}
-
-.nav-container {
-  max-width: 1400px;
-  margin: 0 auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.logo {
-  font-family: 'Courier Prime', monospace;
-  font-size: 20px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  color: var(--bianco-sporco);
-  text-decoration: none;
-}
-
-.nav-menu {
-  display: flex;
-  gap: 30px;
-  list-style: none;
-}
-
-.nav-link {
-  color: var(--grigio-chiaro);
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: 400;
-  letter-spacing: 0.05em;
-  transition: color 0.3s ease;
-  position: relative;
-}
-
-.nav-link:hover {
-  color: var(--bianco-sporco);
-}
-
-.nav-link::after {
-  content: '';
-  position: absolute;
-  bottom: -5px;
-  left: 0;
-  width: 0;
-  height: 1px;
-  background: var(--rosso-cinema);
-  transition: width 0.3s ease;
-}
-
-.nav-link:hover::after {
-  width: 100%;
-}
-
-/* MOBILE MENU TOGGLE */
-.menu-toggle {
-  display: none;
-  background: none;
-  border: none;
-  color: var(--bianco-sporco);
-  font-size: 24px;
-  cursor: pointer;
-}
-
-@media (max-width: 768px) {
-  nav {
-    padding: 15px 20px;
-  }
-  
-  .nav-menu {
-    display: none;
-    position: fixed;
-    top: 60px;
-    left: 0;
-    right: 0;
-    background: var(--nero);
-    flex-direction: column;
-    padding: 20px;
-    border-top: 1px solid var(--grigio-scuro);
-  }
-  
-  .nav-menu.active {
-    display: flex;
-  }
-  
-  .menu-toggle {
-    display: block;
-  }
-}
-
-/* HERO SECTION */
-.hero {
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  background: linear-gradient(to bottom, transparent, rgba(10,10,10,0.5)), var(--nero);
-}
-
-.hero-content {
-  text-align: center;
-  max-width: 800px;
-  padding: 0 20px;
-}
-
-.hero-title {
-  font-size: clamp(48px, 10vw, 120px);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  margin-bottom: 20px;
-  opacity: 0;
-  transform: translateY(30px);
-  animation: fadeInUp 1s ease forwards;
-  animation-delay: 0.5s;
-}
-
-.hero-subtitle {
-  font-size: clamp(16px, 2vw, 20px);
-  font-weight: 300;
-  color: var(--grigio-chiaro);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  opacity: 0;
-  transform: translateY(20px);
-  animation: fadeInUp 1s ease forwards;
-  animation-delay: 0.7s;
-}
-
-@keyframes fadeInUp {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* MANIFESTO SECTION */
-.manifesto {
-  padding: 120px 40px;
-  max-width: 900px;
-  margin: 0 auto;
-}
-
-.manifesto-text {
-  font-size: clamp(20px, 3vw, 28px);
-  font-weight: 300;
-  line-height: 1.5;
-  letter-spacing: 0.02em;
-  text-align: center;
-  color: var(--bianco-sporco);
-}
-
-.manifesto-text strong {
-  font-weight: 500;
-  color: var(--rosso-cinema);
-}
-
-/* PROJECTS SECTION */
-.projects {
-  padding: 80px 40px;
-  max-width: 1400px;
-  margin: 0 auto;
-}
-
-.section-header {
-  text-align: center;
-  margin-bottom: 60px;
-}
-
-.section-title {
-  font-family: 'Courier Prime', monospace;
-  font-size: 14px;
-  font-weight: 400;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--grigio-chiaro);
-  margin-bottom: 10px;
-}
-
-.section-subtitle {
-  font-size: clamp(32px, 5vw, 48px);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-}
-
-.projects-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 40px;
-  margin-top: 60px;
-}
-
-.project-card {
-  background: var(--grigio-scuro);
-  overflow: hidden;
-  cursor: pointer;
-  transition: transform 0.5s ease, box-shadow 0.5s ease;
-  position: relative;
-  border: 1px solid rgba(255,255,255,0.05);
-}
-
-.project-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-}
-
-.project-image {
-  width: 100%;
-  height: 220px;
-  background: linear-gradient(135deg, var(--grigio-scuro), var(--nero));
-  position: relative;
-  overflow: hidden;
-}
-
-/* FILM FRAME DECORATION */
-.project-image::before {
-  content: '';
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  right: 10px;
-  bottom: 10px;
-  border: 1px solid rgba(255,255,255,0.1);
-  pointer-events: none;
-}
-
-.project-image::after {
-  content: '◉ REC';
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  color: var(--rosso-cinema);
-  font-family: 'Courier Prime', monospace;
-  font-size: 12px;
-  animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
-}
-
-/* PROJECT PHOTOS PLACEHOLDERS */
-.project-photo {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  filter: grayscale(100%);
-  transition: filter 0.5s ease;
-}
-
-.project-card:hover .project-photo {
-  filter: grayscale(0%);
-}
-
-.project-info {
-  padding: 30px;
-}
-
-.project-title {
-  font-size: 24px;
-  font-weight: 700;
-  margin-bottom: 10px;
-  letter-spacing: -0.02em;
-}
-
-.project-meta {
-  color: var(--grigio-chiaro);
-  font-size: 13px;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  margin-bottom: 5px;
-}
-
-.project-meta span {
-  color: var(--bianco-sporco);
-}
-
-.project-status {
-  display: inline-block;
-  padding: 4px 12px;
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  margin: 15px 0;
-  border: 1px solid;
-}
-
-.status-post {
-  color: var(--oro-vecchio);
-  border-color: var(--oro-vecchio);
-}
-
-.status-distribution {
-  color: var(--rosso-cinema);
-  border-color: var(--rosso-cinema);
-}
-
-.status-development {
-  color: var(--grigio-chiaro);
-  border-color: var(--grigio-chiaro);
-}
-
-.project-synopsis {
-  font-size: 14px;
-  line-height: 1.6;
-  color: var(--grigio-chiaro);
-  margin-top: 15px;
-}
-
-/* TEAM SECTION */
-.team {
-  padding: 80px 40px;
-  background: var(--grigio-scuro);
-}
-
-.team-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 40px;
-  max-width: 1000px;
-  margin: 60px auto 0;
-}
-
-.team-member {
-  text-align: center;
-  opacity: 0;
-  animation: fadeIn 1s ease forwards;
-}
-
-.team-member:nth-child(1) { animation-delay: 0.1s; }
-.team-member:nth-child(2) { animation-delay: 0.2s; }
-.team-member:nth-child(3) { animation-delay: 0.3s; }
-.team-member:nth-child(4) { animation-delay: 0.4s; }
-.team-member:nth-child(5) { animation-delay: 0.5s; }
-.team-member:nth-child(6) { animation-delay: 0.6s; }
-
-@keyframes fadeIn {
-  to {
-    opacity: 1;
-  }
-}
-
-.member-photo {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--grigio), var(--grigio-scuro));
-  margin: 0 auto 20px;
-  position: relative;
-  overflow: hidden;
-}
-
-.member-photo::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: radial-gradient(circle, transparent, rgba(0,0,0,0.3));
-}
-
-.member-name {
-  font-size: 16px;
-  font-weight: 500;
-  letter-spacing: 0.02em;
-  margin-bottom: 5px;
-}
-
-.member-role {
-  font-size: 13px;
-  color: var(--grigio-chiaro);
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-}
-
-/* CONTACT SECTION */
-.contact {
-  padding: 80px 40px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.contact-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 40px;
-  margin-top: 60px;
-}
-
-.contact-card {
-  background: rgba(255,255,255,0.02);
-  border: 1px solid rgba(255,255,255,0.05);
-  padding: 30px;
-  transition: background 0.3s ease;
-}
-
-.contact-card:hover {
-  background: rgba(255,255,255,0.04);
-}
-
-.contact-name {
-  font-size: 18px;
-  font-weight: 500;
-  margin-bottom: 20px;
-  color: var(--bianco-sporco);
-}
-
-.contact-info {
-  font-size: 14px;
-  line-height: 1.8;
-}
-
-.contact-info a {
-  color: var(--grigio-chiaro);
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-
-.contact-info a:hover {
-  color: var(--bianco-sporco);
-}
-
-/* FOOTER */
-footer {
-  padding: 40px;
-  text-align: center;
-  border-top: 1px solid rgba(255,255,255,0.05);
-}
-
-.footer-content {
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-.footer-logo {
-  font-family: 'Courier Prime', monospace;
-  font-size: 32px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  margin-bottom: 20px;
-  opacity: 0.8;
-}
-
-.footer-info {
-  font-size: 12px;
-  color: var(--grigio);
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-}
-
-.cta-button {
-  display: inline-block;
-  margin-top: 30px;
-  padding: 15px 40px;
-  background: none;
-  border: 2px solid var(--bianco-sporco);
-  color: var(--bianco-sporco);
-  font-family: 'Courier Prime', monospace;
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  text-decoration: none;
-  transition: all 0.3s ease;
-  cursor: pointer;
-}
-
-.cta-button:hover {
-  background: var(--bianco-sporco);
-  color: var(--nero);
-  transform: translateX(5px);
-}
-
-/* FILM STRIP DECORATION */
-.film-strip {
-  position: fixed;
-  top: 50%;
-  left: -50px;
-  width: 40px;
-  height: 200px;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 10px,
-    var(--grigio-scuro) 10px,
-    var(--grigio-scuro) 20px
-  );
-  opacity: 0.1;
-  transform: translateY(-50%);
-  pointer-events: none;
-}
-
-.film-strip.right {
-  left: auto;
-  right: -50px;
-}
-
-/* RESPONSIVE */
-@media (max-width: 768px) {
-  .projects-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .team-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  
-  .contact-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .manifesto {
-    padding: 60px 20px;
-  }
-  
-  .projects, .team, .contact {
-    padding: 60px 20px;
-  }
-}
-
-/* SMOOTH SCROLL */
-html {
-  scroll-behavior: smooth;
-}
-
-/* LOADING ANIMATIONS */
-.fade-in-section {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: all 0.8s ease;
-}
-
-.fade-in-section.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-</style>
+  <script src="./js/main.js" defer></script>
 </head>
 <body>
-  <img src="./assets/img/hero.webp" alt="Momentum hero">
 
 
-<!-- Intro Screen -->
+<!-- Intro Screen with Color Bars -->
 <div class="intro-screen" id="introScreen">
-  <div class="intro-logo" id="introLogo">MOMENTUM</div>
+  <div class="color-bars">
+    <div class="color-bar bar-white"></div>
+    <div class="color-bar bar-yellow"></div>
+    <div class="color-bar bar-cyan"></div>
+    <div class="color-bar bar-green"></div>
+    <div class="color-bar bar-magenta"></div>
+    <div class="color-bar bar-red"></div>
+    <div class="color-bar bar-blue"></div>
+  </div>
+  <div class="intro-logo" id="introLogo">⬤ REC — MOMENTUM COLLECTIVE</div>
 </div>
 
 <!-- Film Strip Decorations -->
@@ -685,9 +82,27 @@ html {
 
 <!-- Hero Section -->
 <section class="hero">
+  <!-- Frame Counter -->
+  <div class="frame-counter" id="frameCounter">FRAME 001</div>
+
+  <!-- Timecode -->
+  <div class="timecode" id="timecode">00:00:00:00</div>
+
+  <!-- Vertical Label -->
+  <div class="vertical-label">Torino — Italia</div>
+
+  <!-- Background Image Carousel -->
+  <div class="hero-carousel">
+    <div class="carousel-track">
+      <img src="./assets/img/inaRow.jpg" alt="Cinema Frame" class="carousel-image" loading="eager">
+      <img src="./assets/img/Ronny_Pozzato_Home_shortmovie_bassaris-220.jpg" alt="Cinema Frame" class="carousel-image" loading="eager">
+      <img src="./assets/img/ruggine3.jpg" alt="Cinema Frame" class="carousel-image" loading="eager">
+    </div>
+  </div>
+
   <div class="hero-content">
     <h1 class="hero-title">MOMENTUM</h1>
-    <p class="hero-subtitle">Collettivo Cinematografico</p>
+    <p class="hero-subtitle">Collettivo Cinematografico — Raccontiamo storie ricercate e coraggiose</p>
   </div>
 </section>
 
@@ -711,7 +126,7 @@ html {
     <!-- IN A ROW -->
     <div class="project-card">
       <div class="project-image">
-        <!-- Placeholder per foto - puoi sostituire con immagini reali -->
+        <img src="./assets/img/inaRow1.jpg" alt="IN A ROW" class="project-photo" loading="lazy">
       </div>
       <div class="project-info">
         <h3 class="project-title">IN A ROW</h3>
@@ -726,7 +141,7 @@ html {
     <!-- HOME -->
     <div class="project-card">
       <div class="project-image">
-        <!-- Placeholder per foto -->
+        <img src="./assets/img/Ronny_Pozzato_Home_shortmovie_bassaris-207.jpg" alt="HOME" class="project-photo" loading="lazy">
       </div>
       <div class="project-info">
         <h3 class="project-title">HOME</h3>
@@ -741,7 +156,7 @@ html {
     <!-- RUGGINE -->
     <div class="project-card">
       <div class="project-image">
-        <!-- Placeholder per foto -->
+        <img src="./assets/img/ruggine2.jpg" alt="RUGGINE" class="project-photo" loading="lazy">
       </div>
       <div class="project-info">
         <h3 class="project-title">RUGGINE</h3>
@@ -879,91 +294,6 @@ html {
   </div>
 </footer>
 
-<script>
-// Intro Animation
-window.addEventListener('load', () => {
-  const introScreen = document.getElementById('introScreen');
-  const introLogo = document.getElementById('introLogo');
-  
-  setTimeout(() => {
-    introLogo.classList.add('typing-done');
-  }, 2000);
-  
-  setTimeout(() => {
-    introScreen.classList.add('fade-out');
-  }, 2800);
-});
-
-// Navigation Scroll Effect
-const navbar = document.getElementById('navbar');
-window.addEventListener('scroll', () => {
-  if (window.scrollY > 50) {
-    navbar.classList.add('scrolled');
-  } else {
-    navbar.classList.remove('scrolled');
-  }
-});
-
-// Mobile Menu Toggle
-const menuToggle = document.getElementById('menuToggle');
-const navMenu = document.getElementById('navMenu');
-
-menuToggle.addEventListener('click', () => {
-  navMenu.classList.toggle('active');
-  menuToggle.textContent = navMenu.classList.contains('active') ? '✕' : '☰';
-});
-
-// Close menu when clicking on a link
-document.querySelectorAll('.nav-link').forEach(link => {
-  link.addEventListener('click', () => {
-    navMenu.classList.remove('active');
-    menuToggle.textContent = '☰';
-  });
-});
-
-// Fade In Animation on Scroll
-const observerOptions = {
-  threshold: 0.1,
-  rootMargin: '0px 0px -50px 0px'
-};
-
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-    }
-  });
-}, observerOptions);
-
-document.querySelectorAll('.fade-in-section').forEach(section => {
-  observer.observe(section);
-});
-
-// Project Cards Hover Effect
-document.querySelectorAll('.project-card').forEach(card => {
-  card.addEventListener('mouseenter', function() {
-    this.style.transform = 'translateY(-5px) scale(1.02)';
-  });
-  
-  card.addEventListener('mouseleave', function() {
-    this.style.transform = 'translateY(0) scale(1)';
-  });
-});
-
-// Add some film-like flicker effect occasionally
-setInterval(() => {
-  if (Math.random() > 0.98) {
-    document.body.style.opacity = '0.98';
-    setTimeout(() => {
-      document.body.style.opacity = '1';
-    }, 50);
-  }
-}, 2000);
-
-// Console Message
-console.log('%c MOMENTUM ', 'background: #c4302b; color: #f5f5f0; font-size: 20px; padding: 10px; font-family: Courier Prime;');
-console.log('%c Collettivo Cinematografico Torinese ', 'color: #666; font-size: 12px;');
-</script>
 
 </body>
 </html>
