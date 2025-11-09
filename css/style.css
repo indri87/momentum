@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800;900&family=Courier+Prime:wght@400;700&family=Oswald:wght@700&family=Anton&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800;900&family=Courier+Prime:wght@400;700&family=Bebas+Neue&display=swap');
 
 * {
   margin: 0;
@@ -296,10 +296,10 @@ nav.scrolled {
 
 /* ICONIC TITLE - LEFT ALIGNED, HUGE */
 .hero-title {
-  font-family: 'Anton', 'Impact', sans-serif;
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
   font-size: clamp(100px, 18vw, 280px);
   font-weight: 400;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.08em;
   line-height: 0.85;
   margin-bottom: 40px;
   color: var(--bianco-sporco);
