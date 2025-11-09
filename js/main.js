@@ -1,3 +1,16 @@
+// Prevent browser scroll restoration and force scroll to top
+if ('scrollRestoration' in history) {
+  history.scrollRestoration = 'manual';
+}
+
+// Force scroll to top immediately on page load
+window.scrollTo(0, 0);
+
+// Also force scroll to top before page unload to prevent position memory
+window.addEventListener('beforeunload', () => {
+  window.scrollTo(0, 0);
+});
+
 // Custom Cursor
 const cursor = document.createElement('div');
 cursor.classList.add('custom-cursor');
@@ -34,12 +47,18 @@ interactiveElements.forEach(el => {
 window.addEventListener('load', () => {
   const introScreen = document.getElementById('introScreen');
 
+  // Lock scroll during intro
+  document.body.style.overflow = 'hidden';
+  window.scrollTo(0, 0);
+
   setTimeout(() => {
     introScreen.classList.add('fade-out');
   }, 2500);
 
-  // Start timecode and frame counter after intro
+  // Start timecode and frame counter after intro, unlock scroll
   setTimeout(() => {
+    document.body.style.overflow = '';
+    window.scrollTo(0, 0); // Force scroll to top one more time
     startTimecode();
     startFrameCounter();
   }, 2500);
