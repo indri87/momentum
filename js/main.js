@@ -1,3 +1,35 @@
+// Custom Cursor
+const cursor = document.createElement('div');
+cursor.classList.add('custom-cursor');
+document.body.appendChild(cursor);
+
+let mouseX = 0;
+let mouseY = 0;
+let cursorX = 0;
+let cursorY = 0;
+
+document.addEventListener('mousemove', (e) => {
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+});
+
+function animateCursor() {
+  const speed = 0.15;
+  cursorX += (mouseX - cursorX) * speed;
+  cursorY += (mouseY - cursorY) * speed;
+  cursor.style.left = cursorX + 'px';
+  cursor.style.top = cursorY + 'px';
+  requestAnimationFrame(animateCursor);
+}
+animateCursor();
+
+// Cursor hover effect on interactive elements
+const interactiveElements = document.querySelectorAll('a, button, .project-card');
+interactiveElements.forEach(el => {
+  el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+  el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+});
+
 // Intro Animation
 window.addEventListener('load', () => {
   const introScreen = document.getElementById('introScreen');
@@ -90,6 +122,68 @@ document.addEventListener('DOMContentLoaded', () => {
       carouselTrack.appendChild(clone);
     });
   }
+});
+
+// Parallax Effect on Hero Images
+window.addEventListener('scroll', () => {
+  const scrolled = window.pageYOffset;
+  const heroCarousel = document.querySelector('.hero-carousel');
+  if (heroCarousel) {
+    heroCarousel.style.transform = `translateY(${scrolled * 0.5}px)`;
+  }
+});
+
+// Reveal Animations
+const revealElements = document.querySelectorAll('.fade-in-section, .project-card, .team-member');
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('active');
+    }
+  });
+}, {
+  threshold: 0.1,
+  rootMargin: '0px 0px -50px 0px'
+});
+
+revealElements.forEach(el => {
+  el.classList.add('reveal');
+  revealObserver.observe(el);
+});
+
+// Magnetic Button Effect
+const magneticButtons = document.querySelectorAll('.cta-button');
+magneticButtons.forEach(btn => {
+  btn.classList.add('magnetic');
+
+  btn.addEventListener('mousemove', (e) => {
+    const rect = btn.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+
+    btn.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
+  });
+
+  btn.addEventListener('mouseleave', () => {
+    btn.style.transform = 'translate(0, 0)';
+  });
+});
+
+// Smooth Image Loading
+document.addEventListener('DOMContentLoaded', () => {
+  const images = document.querySelectorAll('img[data-src]');
+  const imageObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const img = entry.target;
+        img.src = img.dataset.src;
+        img.removeAttribute('data-src');
+        imageObserver.unobserve(img);
+      }
+    });
+  });
+
+  images.forEach(img => imageObserver.observe(img));
 });
 
 // Console Message

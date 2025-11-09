@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Courier+Prime:wght@400;700&family=Bebas+Neue&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800;900&family=Courier+Prime:wght@400;700&display=swap');
 
 * {
   margin: 0;
@@ -22,7 +22,25 @@ body {
   color: var(--bianco-sporco);
   line-height: 1.6;
   overflow-x: hidden;
-  cursor: default;
+  cursor: none;
+}
+
+/* CUSTOM CURSOR */
+.custom-cursor {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--rosso-cinema);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9998;
+  transition: transform 0.2s ease, width 0.3s ease, height 0.3s ease;
+  mix-blend-mode: difference;
+}
+
+.custom-cursor.hover {
+  transform: scale(2);
+  background: rgba(196, 48, 43, 0.2);
 }
 
 ::selection {
@@ -243,16 +261,16 @@ nav.scrolled {
 }
 
 .hero-title {
-  font-family: 'Bebas Neue', 'Impact', sans-serif;
-  font-size: clamp(80px, 15vw, 180px);
-  font-weight: 400;
-  letter-spacing: 0.15em;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+  font-size: clamp(80px, 15vw, 200px);
+  font-weight: 900;
+  letter-spacing: -0.04em;
   margin-bottom: 20px;
   color: var(--bianco-sporco);
+  text-transform: uppercase;
   text-shadow:
-    0 0 20px rgba(196, 48, 43, 0.5),
-    0 0 40px rgba(196, 48, 43, 0.3),
-    4px 4px 0px rgba(196, 48, 43, 0.2);
+    0 0 20px rgba(196, 48, 43, 0.3),
+    0 0 60px rgba(196, 48, 43, 0.2);
   position: relative;
   animation: glitchTitle 8s infinite;
   opacity: 0;
@@ -770,6 +788,69 @@ footer {
   right: -50px;
 }
 
+/* PARALLAX EFFECT */
+.parallax {
+  transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* REVEAL ON SCROLL */
+.reveal {
+  opacity: 0;
+  transform: translateY(50px);
+  transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.reveal.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* MAGNETIC BUTTON EFFECT */
+.magnetic {
+  transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* IMAGE ZOOM ON HOVER */
+.project-card {
+  overflow: hidden;
+  will-change: transform;
+}
+
+.project-photo {
+  transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94), filter 0.5s ease;
+  will-change: transform, filter;
+}
+
+.project-card:hover .project-photo {
+  transform: scale(1.05);
+}
+
+/* PERFORMANCE OPTIMIZATIONS */
+.hero-carousel,
+.carousel-track,
+.parallax {
+  will-change: transform;
+}
+
+/* ACCESSIBILITY */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .custom-cursor {
+    display: none;
+  }
+
+  body {
+    cursor: default !important;
+  }
+}
+
 /* RESPONSIVE */
 @media (max-width: 768px) {
   .projects-grid {
@@ -794,6 +875,14 @@ footer {
 
   .hero-title {
     font-size: clamp(60px, 12vw, 120px);
+  }
+
+  body {
+    cursor: default;
+  }
+
+  .custom-cursor {
+    display: none;
   }
 }
 
