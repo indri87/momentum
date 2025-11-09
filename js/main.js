@@ -30,19 +30,53 @@ interactiveElements.forEach(el => {
   el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
 });
 
-// Intro Animation
+// Color Bars Intro Animation
 window.addEventListener('load', () => {
   const introScreen = document.getElementById('introScreen');
-  const introLogo = document.getElementById('introLogo');
-
-  setTimeout(() => {
-    introLogo.classList.add('typing-done');
-  }, 2000);
 
   setTimeout(() => {
     introScreen.classList.add('fade-out');
-  }, 2800);
+  }, 2500);
+
+  // Start timecode and frame counter after intro
+  setTimeout(() => {
+    startTimecode();
+    startFrameCounter();
+  }, 2500);
 });
+
+// Real-time Timecode
+function startTimecode() {
+  const timecodeEl = document.getElementById('timecode');
+  if (!timecodeEl) return;
+
+  let frames = 0;
+  const fps = 24; // Cinema standard
+
+  setInterval(() => {
+    frames++;
+    const totalSeconds = Math.floor(frames / fps);
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+    const frameNumber = frames % fps;
+
+    const timecode = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}:${String(frameNumber).padStart(2, '0')}`;
+    timecodeEl.textContent = timecode;
+  }, 1000 / fps);
+}
+
+// Frame Counter
+function startFrameCounter() {
+  const frameCounterEl = document.getElementById('frameCounter');
+  if (!frameCounterEl) return;
+
+  let frame = 1;
+  setInterval(() => {
+    frame++;
+    frameCounterEl.textContent = `FRAME ${String(frame).padStart(3, '0')}`;
+  }, 100); // Update every 100ms
+}
 
 // Navigation Scroll Effect
 const navbar = document.getElementById('navbar');
