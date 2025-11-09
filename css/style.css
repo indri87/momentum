@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800;900&family=Courier+Prime:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800;900&family=Courier+Prime:wght@400;700&family=Oswald:wght@700&family=Anton&display=swap');
 
 * {
   margin: 0;
@@ -296,10 +296,10 @@ nav.scrolled {
 
 /* ICONIC TITLE - LEFT ALIGNED, HUGE */
 .hero-title {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+  font-family: 'Anton', 'Impact', sans-serif;
   font-size: clamp(100px, 18vw, 280px);
-  font-weight: 900;
-  letter-spacing: -0.06em;
+  font-weight: 400;
+  letter-spacing: 0.02em;
   line-height: 0.85;
   margin-bottom: 40px;
   color: var(--bianco-sporco);
@@ -308,8 +308,105 @@ nav.scrolled {
   position: relative;
   opacity: 0;
   transform: translateX(-50px);
-  animation: slideInLeft 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  animation-delay: 0.5s;
+  animation: slideInLeft 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards, glitchTitle 8s infinite;
+  animation-delay: 0.5s, 3s;
+  text-shadow:
+    0 0 20px rgba(196, 48, 43, 0.4),
+    0 0 40px rgba(196, 48, 43, 0.2),
+    3px 3px 0px rgba(196, 48, 43, 0.3);
+}
+
+/* GLITCH EFFECT */
+@keyframes glitchTitle {
+  0%, 90%, 92%, 94%, 96%, 100% {
+    transform: translateX(0) skew(0deg);
+  }
+  91% {
+    transform: translateX(-3px) skew(-0.5deg);
+    text-shadow:
+      -2px 0 rgba(255, 0, 0, 0.7),
+      2px 0 rgba(0, 255, 255, 0.7),
+      0 0 20px rgba(196, 48, 43, 0.8);
+  }
+  93% {
+    transform: translateX(3px) skew(0.5deg);
+    text-shadow:
+      2px 0 rgba(255, 0, 0, 0.7),
+      -2px 0 rgba(0, 255, 255, 0.7),
+      0 0 20px rgba(196, 48, 43, 0.8);
+  }
+  95% {
+    transform: translateX(-2px) skew(-0.3deg);
+    text-shadow:
+      -3px 0 rgba(255, 0, 0, 0.5),
+      3px 0 rgba(0, 255, 255, 0.5);
+  }
+}
+
+.hero-title::before {
+  content: 'MOMENTUM';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  color: rgba(255, 0, 0, 0.8);
+  mix-blend-mode: screen;
+  animation: glitch-before 5s infinite;
+  clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+  z-index: -1;
+}
+
+.hero-title::after {
+  content: 'MOMENTUM';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  color: rgba(0, 255, 255, 0.8);
+  mix-blend-mode: screen;
+  animation: glitch-after 6s infinite;
+  clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
+  z-index: -1;
+}
+
+@keyframes glitch-before {
+  0%, 92%, 96%, 100% {
+    transform: translate(0);
+    opacity: 0;
+  }
+  93% {
+    transform: translate(-3px, 2px);
+    opacity: 0.8;
+  }
+  94% {
+    transform: translate(2px, -1px);
+    opacity: 0.8;
+  }
+  95% {
+    transform: translate(-2px, 1px);
+    opacity: 0.8;
+  }
+}
+
+@keyframes glitch-after {
+  0%, 90%, 94%, 98%, 100% {
+    transform: translate(0);
+    opacity: 0;
+  }
+  91% {
+    transform: translate(3px, -2px);
+    opacity: 0.8;
+  }
+  92% {
+    transform: translate(-2px, 2px);
+    opacity: 0.8;
+  }
+  93% {
+    transform: translate(2px, -1px);
+    opacity: 0.8;
+  }
 }
 
 @keyframes slideInLeft {
@@ -848,32 +945,49 @@ footer {
     grid-template-columns: 1fr;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
+    padding-top: 80px;
+    min-height: 100vh;
   }
 
   .hero-carousel {
     width: 100%;
-    height: 40%;
+    height: 35vh;
     top: auto;
     bottom: 0;
-    clip-path: polygon(0 20%, 100% 0, 100% 100%, 0 100%);
+    clip-path: polygon(0 15%, 100% 0, 100% 100%, 0 100%);
+    opacity: 0.5;
   }
 
   .hero-content {
-    padding: 0 30px;
+    padding: 40px 20px;
     grid-column: 1;
+    justify-content: flex-start;
+    flex: 1;
   }
 
   .hero-title {
-    font-size: clamp(60px, 15vw, 120px);
+    font-size: clamp(48px, 12vw, 80px);
+    margin-bottom: 20px;
+    line-height: 0.9;
+  }
+
+  .hero-subtitle {
+    font-size: 14px;
+    padding-left: 15px;
+    max-width: 100%;
   }
 
   .frame-counter {
-    left: 30px;
+    left: 20px;
+    top: 20px;
+    font-size: 12px;
   }
 
   .timecode {
-    left: 30px;
+    left: 20px;
+    bottom: 20px;
+    font-size: 14px;
   }
 
   .vertical-label {
@@ -906,6 +1020,14 @@ footer {
 
   .custom-cursor {
     display: none;
+  }
+
+  nav {
+    padding: 15px 20px;
+  }
+
+  .logo {
+    font-size: 16px;
   }
 }
 
