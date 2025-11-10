@@ -32,274 +32,204 @@
 
   <!-- Web App Manifest -->
   <link rel="manifest" href="./manifest.json">
-  <meta name="theme-color" content="#c4302b">
+  <meta name="theme-color" content="#000000">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="MOMENTUM">
-
-  <!-- Performance -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="dns-prefetch" href="https://fonts.googleapis.com">
 
   <link rel="stylesheet" href="./css/style.css">
   <script src="./js/main.js" defer></script>
 </head>
 <body>
 
-
-<!-- Intro Screen with Color Bars -->
-<div class="intro-screen" id="introScreen">
-  <div class="color-bars">
-    <div class="color-bar bar-white"></div>
-    <div class="color-bar bar-yellow"></div>
-    <div class="color-bar bar-cyan"></div>
-    <div class="color-bar bar-green"></div>
-    <div class="color-bar bar-magenta"></div>
-    <div class="color-bar bar-red"></div>
-    <div class="color-bar bar-blue"></div>
-  </div>
-  <div class="intro-logo" id="introLogo">⬤ REC — MOMENTUM COLLECTIVE</div>
-</div>
-
-<!-- Film Strip Decorations -->
-<div class="film-strip"></div>
-<div class="film-strip right"></div>
-
-<!-- Navigation -->
-<nav id="navbar">
-  <div class="nav-container">
+<!-- Header -->
+<header class="header">
+  <div class="container">
     <a href="#" class="logo">MOMENTUM</a>
-    <button class="menu-toggle" id="menuToggle">☰</button>
-    <ul class="nav-menu" id="navMenu">
-      <li><a href="#manifesto" class="nav-link">Manifesto</a></li>
-      <li><a href="#projects" class="nav-link">Progetti</a></li>
-      <li><a href="#team" class="nav-link">Collettivo</a></li>
-      <li><a href="#contact" class="nav-link">Contatti</a></li>
-      <li><a href="https://www.instagram.com/momentumstudio.it/" target="_blank" rel="noopener" class="nav-link">Instagram</a></li>
-    </ul>
+    <button class="menu-btn" id="menuBtn">
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+</header>
+
+<!-- Mobile Menu -->
+<nav class="mobile-menu" id="mobileMenu">
+  <div class="mobile-menu-content">
+    <a href="#projects" class="menu-link">Progetti</a>
+    <a href="#about" class="menu-link">Collettivo</a>
+    <a href="#contact" class="menu-link">Contatti</a>
+    <a href="https://www.instagram.com/momentumstudio.it/" target="_blank" rel="noopener" class="menu-link">Instagram</a>
   </div>
 </nav>
 
-<!-- Hero Section -->
+<!-- Hero -->
 <section class="hero">
-  <!-- Frame Counter -->
-  <div class="frame-counter" id="frameCounter">FRAME 001</div>
-
-  <!-- Timecode -->
-  <div class="timecode" id="timecode">00:00:00:00</div>
-
-  <!-- Vertical Label -->
-  <div class="vertical-label">Torino — Italia</div>
-
-  <!-- Background Image Carousel -->
-  <div class="hero-carousel">
-    <div class="carousel-track">
-      <img src="./assets/img/inaRow.jpg" alt="Cinema Frame" class="carousel-image" loading="eager">
-      <img src="./assets/img/Ronny_Pozzato_Home_shortmovie_bassaris-220.jpg" alt="Cinema Frame" class="carousel-image" loading="eager">
-      <img src="./assets/img/ruggine3.jpg" alt="Cinema Frame" class="carousel-image" loading="eager">
-    </div>
-  </div>
-
-  <div class="hero-content">
+  <div class="container">
     <h1 class="hero-title">MOMENTUM</h1>
-    <p class="hero-subtitle">Collettivo Cinematografico — Raccontiamo storie ricercate e coraggiose</p>
+    <p class="hero-text">Collettivo cinematografico torinese. Raccontiamo storie ricercate e coraggiose.</p>
   </div>
 </section>
 
-<!-- Manifesto Section -->
-<section class="manifesto fade-in-section" id="manifesto">
-  <div class="manifesto-text">
-    Momentum è un collettivo di registi, produttori e grafici con anni di esperienza nell'audiovisivo cinematografico. 
-    Raccontiamo storie <strong>ricercate</strong> e <strong>coraggiose</strong>, firmate da giovani autori che interrogano il presente. 
-    Ci muove un approccio estremo, ossessivo. Schiavi delle storie di cui ci prendiamo cura.
-  </div>
-</section>
+<!-- Projects Grid -->
+<section class="projects" id="projects">
+  <div class="container">
 
-<!-- Projects Section -->
-<section class="projects fade-in-section" id="projects">
-  <div class="section-header">
-    <h2 class="section-title">I Nostri Lavori</h2>
-    <h3 class="section-subtitle">Storie in Movimento</h3>
-  </div>
-  
-  <div class="projects-grid">
     <!-- IN A ROW -->
-    <div class="project-card">
-      <div class="project-image">
-        <img src="./assets/img/inaRow1.jpg" alt="IN A ROW" class="project-photo" loading="lazy">
-      </div>
-      <div class="project-info">
-        <h3 class="project-title">IN A ROW</h3>
-        <p class="project-meta">Regia: <span>Rocco Zaupa</span></p>
-        <p class="project-meta">Anno: <span>2024</span></p>
-        <p class="project-meta">Genere: <span>Sperimentale/Fotoromanzo</span></p>
-        <span class="project-status status-post">Post-produzione</span>
-        <p class="project-synopsis">Durante un set, una regista disillusa e un'attrice insicura si scontrano ripetendo ossessivamente la stessa scena, fino a scoprire un legame nascosto nei frammenti della memoria.</p>
-      </div>
-    </div>
+    <article class="project">
+      <a href="#" class="project-link">
+        <div class="project-image">
+          <img src="./assets/img/inaRow1.jpg" alt="IN A ROW - Film di Rocco Zaupa" loading="lazy">
+        </div>
+        <div class="project-info">
+          <h2 class="project-title">IN A ROW</h2>
+          <p class="project-meta">Rocco Zaupa · 2024</p>
+          <span class="project-tag">Post-produzione</span>
+        </div>
+      </a>
+    </article>
 
     <!-- HOME -->
-    <div class="project-card">
-      <div class="project-image">
-        <img src="./assets/img/Ronny_Pozzato_Home_shortmovie_bassaris-207.jpg" alt="HOME" class="project-photo" loading="lazy">
-      </div>
-      <div class="project-info">
-        <h3 class="project-title">HOME</h3>
-        <p class="project-meta">Regia: <span>Milena Karaeva</span></p>
-        <p class="project-meta">Anno: <span>2025</span></p>
-        <p class="project-meta">Genere: <span>Romantico-Drammatico</span></p>
-        <span class="project-status status-distribution">Distribuzione</span>
-        <p class="project-synopsis">Emilia e Davide tornano sulle rive del lago alpino dove si sono incontrati anni prima. È un giorno di passaggio, sospeso tra passato e futuro.</p>
-      </div>
-    </div>
+    <article class="project">
+      <a href="#" class="project-link">
+        <div class="project-image">
+          <img src="./assets/img/Ronny_Pozzato_Home_shortmovie_bassaris-207.jpg" alt="HOME - Film di Milena Karaeva" loading="lazy">
+        </div>
+        <div class="project-info">
+          <h2 class="project-title">HOME</h2>
+          <p class="project-meta">Milena Karaeva · 2025</p>
+          <span class="project-tag tag-red">Distribuzione</span>
+        </div>
+      </a>
+    </article>
 
     <!-- RUGGINE -->
-    <div class="project-card">
-      <div class="project-image">
-        <img src="./assets/img/ruggine2.jpg" alt="RUGGINE" class="project-photo" loading="lazy">
-      </div>
-      <div class="project-info">
-        <h3 class="project-title">RUGGINE</h3>
-        <p class="project-meta">Regia: <span>Melissa Palmeri - Riccardo Berca</span></p>
-        <p class="project-meta">Anno: <span>2024</span></p>
-        <p class="project-meta">Genere: <span>Drammatico/Dark Fantasy</span></p>
-        <span class="project-status status-distribution">Distribuzione</span>
-        <p class="project-synopsis">In un mondo rurale e fiabesco, un viandante e il suo cane Ruggine giungono in un remoto villaggio montano, dove un misterioso macellaio gli svela un segreto oscuro.</p>
-      </div>
-    </div>
+    <article class="project">
+      <a href="#" class="project-link">
+        <div class="project-image">
+          <img src="./assets/img/ruggine2.jpg" alt="RUGGINE - Film di Melissa Palmeri e Riccardo Berca" loading="lazy">
+        </div>
+        <div class="project-info">
+          <h2 class="project-title">RUGGINE</h2>
+          <p class="project-meta">Melissa Palmeri · Riccardo Berca · 2024</p>
+          <span class="project-tag tag-red">Distribuzione</span>
+        </div>
+      </a>
+    </article>
 
     <!-- S H -->
-    <div class="project-card">
-      <div class="project-image">
-        <!-- Placeholder per foto -->
-      </div>
-      <div class="project-info">
-        <h3 class="project-title">S H</h3>
-        <p class="project-meta">Regia: <span>Fedor Pavlov</span></p>
-        <p class="project-meta">Anno: <span>2026</span></p>
-        <p class="project-meta">Genere: <span>Thriller/Sci-fi</span></p>
-        <span class="project-status status-development">Sviluppo</span>
-        <p class="project-synopsis">Un uomo conduce una vita in solitudine a bordo di un furgone di consegne. Un viaggio misterioso verso una destinazione sconosciuta.</p>
-      </div>
-    </div>
+    <article class="project">
+      <a href="#" class="project-link">
+        <div class="project-image project-image-placeholder">
+          <div class="placeholder-text">S H</div>
+        </div>
+        <div class="project-info">
+          <h2 class="project-title">S H</h2>
+          <p class="project-meta">Fedor Pavlov · 2026</p>
+          <span class="project-tag">Sviluppo</span>
+        </div>
+      </a>
+    </article>
 
     <!-- MALOCCHIO -->
-    <div class="project-card">
-      <div class="project-image">
-        <!-- Placeholder per foto -->
-      </div>
-      <div class="project-info">
-        <h3 class="project-title">MALOCCHIO</h3>
-        <p class="project-meta">Regia: <span>Leandro Reis</span></p>
-        <p class="project-meta">Anno: <span>2025</span></p>
-        <p class="project-meta">Genere: <span>Grottesco</span></p>
-        <span class="project-status status-development">Sviluppo</span>
-        <p class="project-synopsis">Dopo la morte del fratello, Diógenes lascia il Brasile per Torino per liberarsi da una maledizione. L'occultista Trevolte accetta di aiutarlo.</p>
-      </div>
-    </div>
+    <article class="project">
+      <a href="#" class="project-link">
+        <div class="project-image project-image-placeholder">
+          <div class="placeholder-text">MALOCCHIO</div>
+        </div>
+        <div class="project-info">
+          <h2 class="project-title">MALOCCHIO</h2>
+          <p class="project-meta">Leandro Reis · 2025</p>
+          <span class="project-tag">Sviluppo</span>
+        </div>
+      </a>
+    </article>
+
   </div>
 </section>
 
-<!-- Team Section -->
-<section class="team fade-in-section" id="team">
-  <div class="section-header">
-    <h2 class="section-title">Il Collettivo</h2>
-    <h3 class="section-subtitle">Le Persone Dietro le Storie</h3>
-  </div>
-  
-  <div class="team-grid">
-    <div class="team-member">
-      <div class="member-photo"></div>
-      <h4 class="member-name">Rocco Zaupa</h4>
-      <p class="member-role">Regista & Produttore</p>
-    </div>
-    
-    <div class="team-member">
-      <div class="member-photo"></div>
-      <h4 class="member-name">Fedor Pavlov</h4>
-      <p class="member-role">Regista & Sceneggiatore</p>
-    </div>
-    
-    <div class="team-member">
-      <div class="member-photo"></div>
-      <h4 class="member-name">Indrit Metuku</h4>
-      <p class="member-role">Produttore</p>
-    </div>
-    
-    <div class="team-member">
-      <div class="member-photo"></div>
-      <h4 class="member-name">Riccardo Berca</h4>
-      <p class="member-role">Regista</p>
-    </div>
-    
-    <div class="team-member">
-      <div class="member-photo"></div>
-      <h4 class="member-name">Bruno Brunelli</h4>
-      <p class="member-role">Direttore Fotografia</p>
-    </div>
-    
-    <div class="team-member">
-      <div class="member-photo"></div>
-      <h4 class="member-name">Denisa Kola</h4>
-      <p class="member-role">Producer</p>
+<!-- About Section -->
+<section class="about" id="about">
+  <div class="container">
+    <div class="about-content">
+      <h2 class="section-title">Il Collettivo</h2>
+      <p class="about-text">
+        Momentum è un collettivo di registi, produttori e grafici con anni di esperienza nell'audiovisivo cinematografico.
+        Raccontiamo storie <strong>ricercate</strong> e <strong>coraggiose</strong>, firmate da giovani autori che interrogano il presente.
+        Ci muove un approccio estremo, ossessivo. Schiavi delle storie di cui ci prendiamo cura.
+      </p>
+
+      <div class="team-list">
+        <div class="team-member">
+          <h3>Rocco Zaupa</h3>
+          <p>Regista & Produttore</p>
+        </div>
+        <div class="team-member">
+          <h3>Fedor Pavlov</h3>
+          <p>Regista & Sceneggiatore</p>
+        </div>
+        <div class="team-member">
+          <h3>Indrit Metuku</h3>
+          <p>Produttore</p>
+        </div>
+        <div class="team-member">
+          <h3>Riccardo Berca</h3>
+          <p>Regista</p>
+        </div>
+        <div class="team-member">
+          <h3>Bruno Brunelli</h3>
+          <p>Direttore Fotografia</p>
+        </div>
+        <div class="team-member">
+          <h3>Denisa Kola</h3>
+          <p>Producer</p>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
 <!-- Contact Section -->
-<section class="contact fade-in-section" id="contact">
-  <div class="section-header">
-    <h2 class="section-title">Production Contacts</h2>
-    <h3 class="section-subtitle">Iniziamo un Progetto Insieme</h3>
-  </div>
-  
-  <div class="contact-grid">
-    <div class="contact-card">
-      <h4 class="contact-name">Rocco Zaupa</h4>
-      <div class="contact-info">
+<section class="contact" id="contact">
+  <div class="container">
+    <h2 class="section-title">Contatti</h2>
+
+    <div class="contact-grid">
+      <div class="contact-card">
+        <h3>Rocco Zaupa</h3>
         <p><a href="tel:+393348441166">+39 334 844 1166</a></p>
         <p><a href="mailto:roccozaupa@gmail.com">roccozaupa@gmail.com</a></p>
-        <p>P.IVA 04558630242</p>
+        <p class="contact-vat">P.IVA 04558630242</p>
       </div>
-    </div>
-    
-    <div class="contact-card">
-      <h4 class="contact-name">Fedor Pavlov</h4>
-      <div class="contact-info">
+
+      <div class="contact-card">
+        <h3>Fedor Pavlov</h3>
         <p><a href="tel:+393883236011">+39 388 323 6011</a></p>
         <p><a href="mailto:fpavlovo@gmail.com">fpavlovo@gmail.com</a></p>
-        <p>Freelance</p>
       </div>
-    </div>
-    
-    <div class="contact-card">
-      <h4 class="contact-name">Indrit Metuku</h4>
-      <div class="contact-info">
+
+      <div class="contact-card">
+        <h3>Indrit Metuku</h3>
         <p><a href="tel:+393204909668">+39 320 490 9668</a></p>
         <p><a href="mailto:indritmetuku@gmail.com">indritmetuku@gmail.com</a></p>
-        <p>Freelance</p>
       </div>
     </div>
   </div>
 </section>
 
 <!-- Footer -->
-<footer>
-  <div class="footer-content">
-    <div class="footer-logo">MOMENTUM</div>
-    <p class="footer-info">Collettivo Cinematografico · Torino · Italia</p>
-    <p class="footer-info" style="margin-top: 10px;">
-      <a href="https://www.instagram.com/momentumstudio.it/" target="_blank" rel="noopener" style="color: var(--rosso-cinema); text-decoration: none; transition: opacity 0.3s;">
-        @momentumstudio.it
-      </a>
-    </p>
-    <button class="cta-button" onclick="location.href='mailto:roccozaupa@gmail.com?subject=Nuovo%20Progetto%20Cinematografico'">
-      Iniziamo un Progetto →
-    </button>
+<footer class="footer">
+  <div class="container">
+    <div class="footer-content">
+      <p>MOMENTUM · Torino · Italia</p>
+      <p>
+        <a href="https://www.instagram.com/momentumstudio.it/" target="_blank" rel="noopener">
+          @momentumstudio.it
+        </a>
+      </p>
+    </div>
   </div>
 </footer>
-
 
 </body>
 </html>
