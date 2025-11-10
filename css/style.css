@@ -589,12 +589,12 @@ nav.scrolled {
   background-repeat: no-repeat;
   filter: grayscale(70%) brightness(0.5);
   transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  transform: scale(1.05);
+  transform: scale(1);
 }
 
 .project-fullscreen:hover .project-bg {
   filter: grayscale(0%) brightness(0.6);
-  transform: scale(1);
+  transform: scale(1.02);
 }
 
 .project-overlay {
@@ -605,11 +605,7 @@ nav.scrolled {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(
-    to bottom,
-    rgba(10, 10, 10, 0.2) 0%,
-    rgba(10, 10, 10, 0.6) 100%
-  );
+  background: transparent;
   padding: 40px 20px;
 }
 
@@ -623,17 +619,25 @@ nav.scrolled {
   text-transform: uppercase;
   text-align: center;
   text-shadow:
-    0 0 30px rgba(196, 48, 43, 0.7),
-    0 0 60px rgba(196, 48, 43, 0.4),
-    4px 4px 0px rgba(196, 48, 43, 0.5);
+    0 0 40px rgba(0, 0, 0, 0.9),
+    0 0 80px rgba(0, 0, 0, 0.8),
+    0 0 120px rgba(196, 48, 43, 0.6),
+    4px 4px 8px rgba(0, 0, 0, 0.9),
+    -2px -2px 0px rgba(0, 0, 0, 0.5);
   animation: fadeInUp 1s ease forwards;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 20px 40px;
+  backdrop-filter: blur(5px);
 }
 
 .project-fullscreen:hover .project-title-large {
   text-shadow:
-    0 0 50px rgba(196, 48, 43, 0.9),
-    0 0 100px rgba(196, 48, 43, 0.6),
-    4px 4px 0px rgba(196, 48, 43, 0.7);
+    0 0 50px rgba(0, 0, 0, 1),
+    0 0 100px rgba(0, 0, 0, 0.9),
+    0 0 150px rgba(196, 48, 43, 0.8),
+    4px 4px 10px rgba(0, 0, 0, 1),
+    -2px -2px 0px rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.4);
 }
 
 @keyframes pulse {
@@ -941,6 +945,7 @@ footer {
   .carousel-image {
     filter: brightness(0.6);
     opacity: 0.95;
+    object-fit: contain;
   }
 
   .hero-content {
@@ -987,9 +992,20 @@ footer {
     min-height: 80vh;
   }
 
+  .project-bg {
+    background-size: contain;
+    background-color: var(--nero);
+    transform: scale(1);
+  }
+
+  .project-fullscreen:hover .project-bg {
+    transform: scale(1);
+  }
+
   .project-title-large {
     font-size: clamp(40px, 10vw, 70px);
     letter-spacing: 0.08em;
+    padding: 15px 25px;
   }
 
   .project-overlay {
@@ -1008,6 +1024,11 @@ footer {
   .contact-photo {
     width: 130px;
     height: 130px;
+  }
+
+  .contact-photo img {
+    object-fit: cover;
+    object-position: center;
   }
 
   .contact-card {
