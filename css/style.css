@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800;900&family=Courier+Prime:wght@400;700&family=Bebas+Neue&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800;900&family=Courier+Prime:wght@400;700&family=Bebas+Neue&family=Raleway:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
 * {
   margin: 0;
@@ -27,20 +27,21 @@ body {
 
 /* CUSTOM CURSOR */
 .custom-cursor {
-  width: 20px;
-  height: 20px;
-  border: 2px solid var(--rosso-cinema);
-  border-radius: 50%;
+  width: 24px;
+  height: 24px;
   position: fixed;
   pointer-events: none;
   z-index: 9998;
-  transition: transform 0.2s ease, width 0.3s ease, height 0.3s ease;
-  mix-blend-mode: difference;
+  transition: transform 0.2s ease;
+  background-image: url('../assets/cursor-key.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  transform: translate(-4px, -4px);
 }
 
 .custom-cursor.hover {
-  transform: scale(2);
-  background: rgba(196, 48, 43, 0.2);
+  transform: translate(-4px, -4px) scale(1.3);
 }
 
 ::selection {
@@ -164,12 +165,20 @@ nav.scrolled {
 }
 
 .logo {
-  font-family: 'Courier Prime', monospace;
-  font-size: 20px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  color: var(--bianco-sporco);
+  display: flex;
+  align-items: center;
+  transition: opacity 0.3s ease;
   text-decoration: none;
+}
+
+.logo:hover {
+  opacity: 0.8;
+}
+
+.logo-icon {
+  height: 60px;
+  width: auto;
+  display: block;
 }
 
 .nav-menu {
@@ -220,6 +229,10 @@ nav.scrolled {
 @media (max-width: 768px) {
   nav {
     padding: 15px 20px;
+  }
+
+  .logo-icon {
+    height: 48px;
   }
 
   .nav-menu {
@@ -281,7 +294,7 @@ nav.scrolled {
 
 @keyframes scroll {
   0% { transform: translateX(0); }
-  100% { transform: translateX(-300vw); }
+  100% { transform: translateX(-400vw); }
 }
 
 .hero-content {
@@ -292,6 +305,42 @@ nav.scrolled {
   padding: 0 60px;
   position: relative;
   z-index: 2;
+}
+
+/* HERO BRAND - LOGO + TEXT CONTAINER */
+.hero-brand {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  margin-bottom: 40px;
+  opacity: 0;
+  transform: translateX(-50px);
+  animation: slideInLeft 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: 0.5s;
+}
+
+/* HERO LOGO - SMALLER, NEXT TO TEXT */
+.hero-logo {
+  height: clamp(100px, 15vw, 200px);
+  width: auto;
+  filter: drop-shadow(0 0 30px rgba(196, 48, 43, 0.5))
+          drop-shadow(0 0 60px rgba(196, 48, 43, 0.3))
+          drop-shadow(5px 5px 10px rgba(0, 0, 0, 0.5));
+}
+
+/* HERO TITLE TEXT - RALEWAY FONT */
+.hero-title-text {
+  font-family: 'Raleway', sans-serif;
+  font-size: clamp(60px, 12vw, 140px);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  line-height: 1;
+  color: var(--bianco-sporco);
+  text-transform: uppercase;
+  text-shadow:
+    0 0 20px rgba(0, 0, 0, 0.8),
+    0 0 40px rgba(0, 0, 0, 0.6),
+    3px 3px 8px rgba(0, 0, 0, 0.9);
 }
 
 /* ICONIC TITLE - LEFT ALIGNED, HUGE */
@@ -928,14 +977,15 @@ footer {
     grid-template-columns: 1fr;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: space-between;
     padding-top: 80px;
     min-height: 100vh;
+    gap: 0;
   }
 
   .hero-carousel {
     width: 100%;
-    height: 40vh;
+    height: 45vh;
     top: auto;
     bottom: 0;
     clip-path: polygon(0 15%, 100% 0, 100% 100%, 0 100%);
@@ -945,14 +995,27 @@ footer {
   .carousel-image {
     filter: brightness(0.6);
     opacity: 0.95;
-    object-fit: contain;
+    object-fit: cover;
   }
 
   .hero-content {
-    padding: 40px 20px;
+    padding: 30px 20px 20px 20px;
     grid-column: 1;
     justify-content: flex-start;
-    flex: 1;
+    flex: 0 1 auto;
+  }
+
+  .hero-brand {
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+
+  .hero-logo {
+    height: clamp(60px, 20vw, 100px);
+  }
+
+  .hero-title-text {
+    font-size: clamp(36px, 10vw, 60px);
   }
 
   .hero-title {
@@ -965,6 +1028,7 @@ footer {
     font-size: 14px;
     padding-left: 15px;
     max-width: 100%;
+    margin-bottom: 0;
   }
 
   .frame-counter {
@@ -989,12 +1053,12 @@ footer {
   }
 
   .project-fullscreen {
-    min-height: 80vh;
+    min-height: 85vh;
   }
 
   .project-bg {
-    background-size: contain;
-    background-color: var(--nero);
+    background-size: cover;
+    background-position: center;
     transform: scale(1);
   }
 
