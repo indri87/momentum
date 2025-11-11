@@ -337,9 +337,9 @@ nav.scrolled {
   color: var(--bianco-sporco);
   text-transform: uppercase;
   text-shadow:
-    0 0 30px rgba(196, 48, 43, 0.5),
-    0 0 60px rgba(196, 48, 43, 0.3),
-    5px 5px 10px rgba(0, 0, 0, 0.5);
+    0 0 20px rgba(0, 0, 0, 0.8),
+    0 0 40px rgba(0, 0, 0, 0.6),
+    3px 3px 8px rgba(0, 0, 0, 0.9);
 }
 
 /* ICONIC TITLE - LEFT ALIGNED, HUGE */
