@@ -306,6 +306,20 @@ nav.scrolled {
   z-index: 2;
 }
 
+/* HERO LOGO - LEFT ALIGNED, LARGE */
+.hero-logo {
+  height: clamp(140px, 20vw, 280px);
+  width: auto;
+  margin-bottom: 40px;
+  opacity: 0;
+  transform: translateX(-50px);
+  animation: slideInLeft 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: 0.5s;
+  filter: drop-shadow(0 0 30px rgba(196, 48, 43, 0.5))
+          drop-shadow(0 0 60px rgba(196, 48, 43, 0.3))
+          drop-shadow(5px 5px 10px rgba(0, 0, 0, 0.5));
+}
+
 /* ICONIC TITLE - LEFT ALIGNED, HUGE */
 .hero-title {
   font-family: 'Bebas Neue', 'Impact', sans-serif;
@@ -966,6 +980,11 @@ footer {
     grid-column: 1;
     justify-content: flex-start;
     flex: 0 1 auto;
+  }
+
+  .hero-logo {
+    height: clamp(100px, 25vw, 160px);
+    margin-bottom: 20px;
   }
 
   .hero-title {
