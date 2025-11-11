@@ -293,7 +293,7 @@ nav.scrolled {
 
 @keyframes scroll {
   0% { transform: translateX(0); }
-  100% { transform: translateX(-300vw); }
+  100% { transform: translateX(-400vw); }
 }
 
 .hero-content {
