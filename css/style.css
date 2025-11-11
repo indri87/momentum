@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800;900&family=Courier+Prime:wght@400;700&family=Bebas+Neue&family=Raleway:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800;900&family=Courier+Prime:wght@400;700&family=Bebas+Neue&family=Raleway:wght@100;200;300;400;500;600;700;800;900&family=Lato:wght@100;300;400;700;900&display=swap');
 
 * {
   margin: 0;
@@ -331,16 +331,13 @@ nav.scrolled {
 /* HERO TITLE TEXT - RALEWAY FONT */
 .hero-title-text {
   font-family: 'Raleway', sans-serif;
-  font-size: clamp(60px, 12vw, 140px);
-  font-weight: 700;
+  font-size: clamp(28px, 5vw, 48px);
+  font-weight: 300;
   letter-spacing: 0.05em;
   line-height: 1;
   color: var(--bianco-sporco);
-  text-transform: uppercase;
-  text-shadow:
-    0 0 20px rgba(0, 0, 0, 0.8),
-    0 0 40px rgba(0, 0, 0, 0.6),
-    3px 3px 8px rgba(0, 0, 0, 0.9);
+  text-transform: none;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 /* ICONIC TITLE - LEFT ALIGNED, HUGE */
@@ -508,12 +505,12 @@ nav.scrolled {
 }
 
 .hero-subtitle {
-  font-family: 'Inter', sans-serif;
-  font-size: clamp(14px, 1.5vw, 18px);
+  font-family: 'Lato', sans-serif;
+  font-size: clamp(18px, 2vw, 28px);
   font-weight: 400;
-  color: var(--grigio-chiaro);
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
+  color: var(--bianco-sporco);
+  letter-spacing: 0.05em;
+  text-transform: none;
   text-align: left;
   max-width: 400px;
   line-height: 1.8;
@@ -592,12 +589,12 @@ nav.scrolled {
 }
 
 .section-title {
-  font-family: 'Courier Prime', monospace;
-  font-size: 14px;
-  font-weight: 400;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--grigio-chiaro);
+  font-family: 'Lato', sans-serif;
+  font-size: clamp(28px, 4vw, 42px);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: none;
+  color: var(--bianco-sporco);
   margin-bottom: 10px;
 }
 
@@ -642,7 +639,7 @@ nav.scrolled {
 }
 
 .project-fullscreen:hover .project-bg {
-  filter: grayscale(0%) brightness(0.6);
+  filter: grayscale(0%) brightness(1);
   transform: scale(1.02);
 }
 
