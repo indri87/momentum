@@ -164,16 +164,10 @@ nav.scrolled {
 }
 
 .logo {
-  font-family: 'Courier Prime', monospace;
-  font-size: 20px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  color: var(--bianco-sporco);
-  text-decoration: none;
   display: flex;
   align-items: center;
-  gap: 12px;
   transition: opacity 0.3s ease;
+  text-decoration: none;
 }
 
 .logo:hover {
@@ -181,13 +175,9 @@ nav.scrolled {
 }
 
 .logo-icon {
-  height: 40px;
+  height: 45px;
   width: auto;
   display: block;
-}
-
-.logo-text {
-  display: inline-block;
 }
 
 .nav-menu {
@@ -240,13 +230,8 @@ nav.scrolled {
     padding: 15px 20px;
   }
 
-  .logo {
-    gap: 8px;
-    font-size: 16px;
-  }
-
   .logo-icon {
-    height: 32px;
+    height: 36px;
   }
 
   .nav-menu {
