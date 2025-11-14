@@ -1004,15 +1004,11 @@ footer {
 
   .hero-brand {
     gap: 15px;
-    margin-bottom: 20px;
-  }
-
-  .hero-logo {
-    height: clamp(60px, 20vw, 100px);
+    margin-bottom: 15px;
   }
 
   .hero-title-text {
-    font-size: clamp(36px, 10vw, 60px);
+    font-size: clamp(22px, 6vw, 32px);
   }
 
   .hero-title {
@@ -1022,7 +1018,7 @@ footer {
   }
 
   .hero-subtitle {
-    font-size: 14px;
+    font-size: clamp(16px, 4vw, 20px);
     padding-left: 15px;
     max-width: 100%;
     margin-bottom: 0;
@@ -1102,6 +1098,25 @@ footer {
 
   .projects, .team, .contact {
     padding: 60px 20px;
+  }
+
+  .section-header {
+    padding: 0 20px;
+    margin-bottom: 40px;
+  }
+
+  .section-title {
+    font-size: clamp(24px, 6vw, 36px);
+    text-align: center;
+  }
+
+  .contact-name {
+    font-size: 20px;
+  }
+
+  .contact-role {
+    font-size: 14px;
+    line-height: 1.4;
   }
 
   body {
